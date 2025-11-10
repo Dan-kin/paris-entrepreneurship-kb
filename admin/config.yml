@@ -1,0 +1,72 @@
+# Decap CMS 配置文件
+# 文档: https://decapcms.org/docs/configuration-options/
+
+# 后端配置 - 使用 GitHub 作为内容存储
+backend:
+  name: github
+  repo: Dan-kin/paris-entrepreneurship-kb  # 您的 GitHub 仓库
+  branch: main  # 主分支名称
+
+# 发布模式 - editorial_workflow 启用编辑工作流（草稿、审核、发布）
+publish_mode: editorial_workflow
+
+# 媒体文件配置
+media_folder: "static/uploads"  # 上传文件保存位置
+public_folder: "/uploads"  # 访问路径
+
+# 网站 URL（可选）
+# site_url: https://your-site.netlify.app
+
+# 显示预览链接
+# display_url: https://your-site.netlify.app
+
+# 语言设置
+locale: 'zh_Hans'
+
+# 集合配置 - 定义内容类型
+collections:
+  # 文章集合
+  - name: "posts"
+    label: "文章"
+    label_singular: "文章"
+    folder: "content/posts"
+    create: true  # 允许用户创建新文章
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"  # 文件名格式
+    fields:
+      - {label: "标题", name: "title", widget: "string"}
+      - {label: "发布日期", name: "date", widget: "datetime", format: "YYYY-MM-DD HH:mm:ss"}
+      - {label: "作者", name: "author", widget: "string", default: "巴黎创业团队"}
+      - {label: "描述", name: "description", widget: "text", required: false}
+      - {label: "标签", name: "tags", widget: "list", required: false}
+      - {label: "分类", name: "category", widget: "select", options: ["创业指南", "签证居留", "日常生活", "资源分享", "案例故事"], default: "创业指南"}
+      - {label: "特色图片", name: "featured_image", widget: "image", required: false}
+      - {label: "是否发布", name: "published", widget: "boolean", default: true}
+      - {label: "正文", name: "body", widget: "markdown"}
+
+  # 页面集合
+  - name: "pages"
+    label: "页面"
+    label_singular: "页面"
+    folder: "content/pages"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - {label: "标题", name: "title", widget: "string"}
+      - {label: "链接路径", name: "permalink", widget: "string"}
+      - {label: "描述", name: "description", widget: "text", required: false}
+      - {label: "正文", name: "body", widget: "markdown"}
+
+  # 资源库集合
+  - name: "resources"
+    label: "资源"
+    label_singular: "资源"
+    folder: "content/resources"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - {label: "资源名称", name: "title", widget: "string"}
+      - {label: "资源类型", name: "type", widget: "select", options: ["政府部门", "创业平台", "孵化器", "投资机构", "服务机构", "其他"], default: "其他"}
+      - {label: "链接", name: "url", widget: "string", required: false}
+      - {label: "联系方式", name: "contact", widget: "text", required: false}
+      - {label: "地址", name: "address", widget: "string", required: false}
+      - {label: "描述", name: "description", widget: "markdown"}
