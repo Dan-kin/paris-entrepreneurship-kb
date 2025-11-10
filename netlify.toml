@@ -100,22 +100,22 @@
 [context.branch-deploy]
   command = "python src/build.py"
 
-# 插件配置
-[[plugins]]
-  package = "@netlify/plugin-lighthouse"
+# 插件配置（暂时禁用，等网站稳定后再启用）
+# [[plugins]]
+#   package = "@netlify/plugin-lighthouse"
+#
+#   # Lighthouse 配置（可选，用于性能监控）
+#   [plugins.inputs.thresholds]
+#     performance = 0.8
+#     accessibility = 0.9
+#     best-practices = 0.9
+#     seo = 0.9
 
-  # Lighthouse 配置（可选，用于性能监控）
-  [plugins.inputs.thresholds]
-    performance = 0.8
-    accessibility = 0.9
-    best-practices = 0.9
-    seo = 0.9
-
-[[plugins]]
-  # 自动优化插件
-  package = "netlify-plugin-submit-sitemap"
-
-  [plugins.inputs]
-    # 提交 sitemap 到搜索引擎（如果你有 sitemap 的话）
-    baseUrl = "https://paris-entrepreneurship.netlify.app"
-    sitemapPath = "/sitemap.xml"
+# [[plugins]]
+#   # 自动优化插件
+#   package = "netlify-plugin-submit-sitemap"
+#
+#   [plugins.inputs]
+#     # 提交 sitemap 到搜索引擎（如果你有 sitemap 的话）
+#     baseUrl = "https://paris-entrepreneurship.netlify.app"
+#     sitemapPath = "/sitemap.xml"
