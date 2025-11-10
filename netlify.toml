@@ -1,9 +1,12 @@
 [build]
-  # 发布目录 - 当前目录就是根目录
-  publish = "."
+  # 发布目录 - 项目根目录（包含 index.html）
+  publish = ""
 
   # 构建命令 - 静态HTML不需要构建
-  command = "echo 'No build needed for static HTML'"
+  command = ""
+
+  # 明确告诉 Netlify 这是根目录部署
+  base = ""
 
 # 重定向规则 - SPA应用支持
 [[redirects]]
