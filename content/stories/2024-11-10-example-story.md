@@ -6,7 +6,7 @@ company: 巴黎科技创新公司
 industry: 科技
 founded_year: 2020
 location: 巴黎
-cover_image: ""
+cover_image: /uploads/420000392_1856652768085631_6106516020964450090_n.jpg
 tags:
   - 科技创业
   - 初创公司
