@@ -1,0 +1,52 @@
+{
+  "cards": [
+    {
+      "id": "global",
+      "icon": "🌍",
+      "title": "全球普及规模",
+      "description": "史无前例的采用速度",
+      "stat": "7亿",
+      "stat_description": "周活跃用户"
+    },
+    {
+      "id": "usage",
+      "icon": "💼",
+      "title": "工作 vs 个人使用",
+      "description": "使用场景的演变",
+      "stat": "70%",
+      "stat_description": "非工作相关"
+    },
+    {
+      "id": "topics",
+      "icon": "📊",
+      "title": "热门对话主题",
+      "description": "用户最关心什么",
+      "stat": "80%",
+      "stat_description": "集中在三大类"
+    },
+    {
+      "id": "interaction",
+      "icon": "🎯",
+      "title": "交互方式",
+      "description": "用户如何使用 AI",
+      "stat": "49%",
+      "stat_description": "寻求建议"
+    },
+    {
+      "id": "demographics",
+      "icon": "👥",
+      "title": "人口统计洞察",
+      "description": "谁在使用 ChatGPT",
+      "stat": "52%",
+      "stat_description": "女性用户"
+    },
+    {
+      "id": "writing",
+      "icon": "✍️",
+      "title": "写作主导工作",
+      "description": "最常见的工作用途",
+      "stat": "40%",
+      "stat_description": "工作消息"
+    }
+  ]
+}

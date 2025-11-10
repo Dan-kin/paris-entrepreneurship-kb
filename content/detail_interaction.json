@@ -1,0 +1,41 @@
+{
+  "title": "用户交互方式",
+  "subtitle": "寻求、执行还是表达？",
+  "interaction_modes": [
+    {
+      "type": "询问型（Asking）",
+      "percentage": 49,
+      "description": "寻求信息或建议以做出更好决策",
+      "examples": "示例：\"林肯之后谁是总统？\"、\"如何为本季度创建预算？\""
+    },
+    {
+      "type": "执行型（Doing）",
+      "percentage": 40,
+      "description": "要求 ChatGPT 执行任务或生成可直接使用的输出",
+      "examples": "示例：\"将此邮件改得更正式\"、\"编写总结 ChatGPT 用例的报告\""
+    },
+    {
+      "type": "表达型（Expressing）",
+      "percentage": 11,
+      "description": "既不寻求信息也不要求执行任务的表达性消息",
+      "examples": "示例：\"你好！\"、\"我今天过得很棒\""
+    }
+  ],
+  "satisfaction": [
+    {
+      "type": "询问型",
+      "rating": "4.5/5",
+      "description": "好评率最高"
+    },
+    {
+      "type": "执行型",
+      "rating": "3.7/5",
+      "description": "中等满意度"
+    },
+    {
+      "type": "表达型",
+      "rating": "2.8/5",
+      "description": "满意度相对较低"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "title": "全球普及规模",
+  "subtitle": "ChatGPT 的指数级增长",
+  "growth": {
+    "weekly_active_users": 700,
+    "global_percentage": 10,
+    "daily_messages": 25,
+    "messages_per_second": 29000
+  },
+  "timeline": [
+    {
+      "date": "2022年11月",
+      "title": "ChatGPT 公开发布",
+      "description": "仅用 5天 突破 100万用户"
+    },
+    {
+      "date": "2023年12月",
+      "title": "第一年突破 1亿 WAU",
+      "description": "成为历史上增长最快的消费应用"
+    },
+    {
+      "date": "2025年7月",
+      "title": "达到 7亿 周活跃用户",
+      "description": "两年半时间内增长 700倍"
+    }
+  ]
+}

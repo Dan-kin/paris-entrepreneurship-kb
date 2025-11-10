@@ -1,0 +1,73 @@
+{
+  "title": "写作主导工作任务",
+  "subtitle": "最常见的工作用途",
+  "writing_percentage": {
+    "overall": 40,
+    "by_occupation": [
+      {
+        "occupation": "管理与商业",
+        "percentage": 52
+      },
+      {
+        "occupation": "其他专业职位",
+        "percentage": 49
+      },
+      {
+        "occupation": "非专业职位",
+        "percentage": 50
+      }
+    ]
+  },
+  "writing_tasks": [
+    {
+      "icon": "📋",
+      "title": "编辑和批评",
+      "description": "改进或修改用户提供的文本",
+      "importance": "最常见"
+    },
+    {
+      "icon": "🌐",
+      "title": "翻译",
+      "description": "将文本从一种语言翻译成另一种语言",
+      "importance": "第三常见"
+    },
+    {
+      "icon": "📄",
+      "title": "摘要生成",
+      "description": "创建论点或主题摘要",
+      "importance": "第四常见"
+    },
+    {
+      "icon": "✉️",
+      "title": "个人写作",
+      "description": "协助撰写消息、邮件或社交媒体帖子",
+      "importance": "第二常见"
+    }
+  ],
+  "productivity_impact": [
+    {
+      "icon": "📊",
+      "activity": "信息获取",
+      "percentage": 19.3,
+      "description": "最常见的工作活动"
+    },
+    {
+      "icon": "🧠",
+      "activity": "决策与问题解决",
+      "percentage": 14.9,
+      "description": "第二常见的工作活动"
+    },
+    {
+      "icon": "💡",
+      "activity": "创造性思考",
+      "percentage": 13.0,
+      "description": "第三常见的工作活动"
+    },
+    {
+      "icon": "📝",
+      "activity": "文档记录",
+      "percentage": 18.4,
+      "description": "工作消息中最常见"
+    }
+  ]
+}
