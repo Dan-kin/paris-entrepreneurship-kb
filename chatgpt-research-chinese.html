@@ -1,0 +1,1624 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatGPT 使用研究 | 关键发现</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', 'Hiragino Sans GB', 'Source Han Sans CN', sans-serif;
+            background: #1e1e1e;
+            color: #ffffff;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Canvas背景动画 */
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .page {
+            position: absolute;
+            width: 100%;
+            min-height: 100vh;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+            z-index: 1;
+        }
+
+        .page.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        /* 主页样式 */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, #0066ff44 0%, transparent 70%);
+            border-radius: 50%;
+            animation: heroGlow 6s ease-in-out infinite;
+            filter: blur(40px);
+        }
+
+        @keyframes heroGlow {
+            0%, 100% { 
+                transform: translate(-50%, -50%) scale(1); 
+                opacity: 0.3;
+            }
+            50% { 
+                transform: translate(-50%, -50%) scale(1.3); 
+                opacity: 0.6;
+            }
+        }
+
+        h1 {
+            font-size: 5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #0066ff, #00ffff, #0066ff);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 3s ease infinite, titleFloat 3s ease-in-out infinite;
+            z-index: 2;
+            position: relative;
+            text-shadow: 0 0 80px #0066ff88;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes titleFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        h2 {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 2rem;
+            color: #0066ff;
+            position: relative;
+            display: inline-block;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #0066ff, #00ffff);
+            animation: underlineGrow 1s ease-out;
+        }
+
+        @keyframes underlineGrow {
+            from { width: 0%; }
+            to { width: 100%; }
+        }
+
+        .subtitle {
+            font-size: 1.8rem;
+            color: #00ffff;
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease-out 0.3s backwards;
+            text-shadow: 0 0 20px #00ffff66;
+            z-index: 2;
+            position: relative;
+        }
+
+        .authors {
+            font-size: 1.1rem;
+            color: #ffffff;
+            opacity: 0.9;
+            margin-bottom: 3rem;
+            animation: fadeInUp 1s ease-out 0.6s backwards;
+            z-index: 2;
+            position: relative;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 交互卡片 */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+            padding: 3rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .interactive-card {
+            background: linear-gradient(135deg, #2a2a2a, #1e1e1e);
+            border: 2px solid #0066ff;
+            border-radius: 20px;
+            padding: 2.5rem;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            animation: cardFadeIn 0.8s ease-out backwards;
+        }
+
+        .interactive-card:nth-child(1) { animation-delay: 0.1s; }
+        .interactive-card:nth-child(2) { animation-delay: 0.2s; }
+        .interactive-card:nth-child(3) { animation-delay: 0.3s; }
+        .interactive-card:nth-child(4) { animation-delay: 0.4s; }
+        .interactive-card:nth-child(5) { animation-delay: 0.5s; }
+        .interactive-card:nth-child(6) { animation-delay: 0.6s; }
+
+        @keyframes cardFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(50px) rotateX(-10deg);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) rotateX(0);
+            }
+        }
+
+        .interactive-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #0066ff, #00ffff, #0066ff);
+            background-size: 400% 400%;
+            border-radius: 20px;
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.4s ease;
+            animation: gradientRotate 4s ease infinite;
+        }
+
+        @keyframes gradientRotate {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .interactive-card:hover {
+            transform: translateY(-15px) scale(1.05);
+            box-shadow: 0 20px 60px #0066ff66;
+            border-color: #00ffff;
+        }
+
+        .interactive-card:hover::before {
+            opacity: 1;
+        }
+
+        .card-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+            animation: iconBounce 2s ease-in-out infinite;
+        }
+
+        @keyframes iconBounce {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+
+        .card-title {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #00ffff;
+            margin-bottom: 1rem;
+        }
+
+        .card-description {
+            font-size: 1.1rem;
+            color: #cccccc;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-stat {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #0066ff;
+            text-shadow: 0 0 20px #0066ff88;
+            animation: numberPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes numberPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .learn-more {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background: linear-gradient(135deg, #0066ff, #00ffff);
+            color: #1e1e1e;
+            border: none;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 1rem;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 5px 15px #0066ff44;
+        }
+
+        .learn-more:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px #0066ff88;
+        }
+
+        /* 详情页样式 */
+        .detail-page {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            animation: detailPageFadeIn 0.6s ease-out;
+        }
+
+        @keyframes detailPageFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #2a2a2a, #1e1e1e);
+            border: 2px solid #0066ff;
+            border-radius: 25px;
+            color: #00ffff;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .back-button:hover {
+            background: #0066ff;
+            color: #1e1e1e;
+            transform: translateX(-10px);
+        }
+
+        .detail-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 3rem;
+            background: linear-gradient(135deg, #0066ff22, #00ffff11);
+            border-radius: 20px;
+            border: 2px solid #0066ff;
+        }
+
+        .detail-section {
+            background: linear-gradient(135deg, #2a2a2a, #1e1e1e);
+            border: 2px solid #0066ff55;
+            border-radius: 15px;
+            padding: 2.5rem;
+            margin: 2rem 0;
+            animation: sectionSlideIn 0.8s ease-out backwards;
+        }
+
+        .detail-section:nth-child(odd) {
+            animation-delay: 0.1s;
+        }
+
+        .detail-section:nth-child(even) {
+            animation-delay: 0.2s;
+        }
+
+        @keyframes sectionSlideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .progress-bar-container {
+            background: #2a2a2a;
+            border-radius: 20px;
+            height: 40px;
+            margin: 1.5rem 0;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #0066ff, #00ffff);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 1.5rem;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: width 2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 0 20px #0066ff88;
+            position: relative;
+        }
+
+        .progress-bar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .timeline {
+            position: relative;
+            padding: 2rem 0 2rem 4rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(180deg, #0066ff, #00ffff);
+            box-shadow: 0 0 10px #0066ff88;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: #2a2a2a;
+            border-radius: 15px;
+            border-left: 4px solid #00ffff;
+            animation: timelineItemSlide 0.8s ease-out backwards;
+        }
+
+        .timeline-item:nth-child(1) { animation-delay: 0.2s; }
+        .timeline-item:nth-child(2) { animation-delay: 0.4s; }
+        .timeline-item:nth-child(3) { animation-delay: 0.6s; }
+
+        @keyframes timelineItemSlide {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -50px;
+            top: 30px;
+            width: 20px;
+            height: 20px;
+            background: #00ffff;
+            border-radius: 50%;
+            border: 4px solid #1e1e1e;
+            box-shadow: 0 0 15px #00ffff;
+            animation: dotPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes dotPulse {
+            0%, 100% { 
+                transform: scale(1);
+                box-shadow: 0 0 15px #00ffff;
+            }
+            50% { 
+                transform: scale(1.3);
+                box-shadow: 0 0 25px #00ffff;
+            }
+        }
+
+        .highlight {
+            color: #00ffff;
+            font-weight: bold;
+            text-shadow: 0 0 10px #00ffff66;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #0066ff22, #00ffff11);
+            border: 2px solid #0066ff;
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-box:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px #0066ff66;
+            border-color: #00ffff;
+        }
+
+        .big-stat {
+            font-size: 4.5rem;
+            font-weight: bold;
+            color: #00ffff;
+            text-shadow: 0 0 30px #00ffff88;
+            margin: 1rem 0;
+            animation: bigStatScale 3s ease-in-out infinite;
+        }
+
+        @keyframes bigStatScale {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .feature-box {
+            background: #2a2a2a;
+            border-radius: 15px;
+            padding: 2rem;
+            border-left: 5px solid #0066ff;
+            transition: all 0.4s ease;
+            animation: featureFadeIn 0.8s ease-out backwards;
+        }
+
+        .feature-box:nth-child(1) { animation-delay: 0.1s; }
+        .feature-box:nth-child(2) { animation-delay: 0.2s; }
+        .feature-box:nth-child(3) { animation-delay: 0.3s; }
+        .feature-box:nth-child(4) { animation-delay: 0.4s; }
+
+        @keyframes featureFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .feature-box:hover {
+            transform: translateX(15px);
+            border-left-color: #00ffff;
+            box-shadow: -5px 0 20px #0066ff44;
+        }
+
+        /* 浮动返回按钮 */
+        .floating-back-button {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #0066ff, #00ffff);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 10px 30px #0066ff66;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-size: 2rem;
+        }
+
+        .floating-back-button.visible {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .floating-back-button:hover {
+            transform: scale(1.2) rotate(360deg);
+            box-shadow: 0 15px 40px #0066ff88;
+        }
+
+        .floating-back-button::before {
+            content: '🏠';
+            font-size: 2rem;
+            animation: floatBounce 2s ease-in-out infinite;
+        }
+
+        @keyframes floatBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* 数字增长动画 */
+        .animate-number {
+            display: inline-block;
+        }
+
+        /* 插图装饰 */
+        .illustration {
+            width: 100%;
+            max-width: 500px;
+            margin: 2rem auto;
+            display: block;
+            animation: illustrationFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes illustrationFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(2deg); }
+        }
+
+        .chart-illustration {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+            height: 200px;
+            margin: 2rem 0;
+            padding: 2rem;
+            background: linear-gradient(135deg, #0066ff11, #00ffff11);
+            border-radius: 15px;
+        }
+
+        .chart-bar {
+            width: 60px;
+            background: linear-gradient(180deg, #00ffff, #0066ff);
+            border-radius: 10px 10px 0 0;
+            position: relative;
+            transition: height 2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 0 20px #0066ff66;
+        }
+
+        .chart-bar::after {
+            content: attr(data-label);
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.9rem;
+            color: #888;
+            white-space: nowrap;
+        }
+
+        .chart-bar::before {
+            content: attr(data-value);
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-weight: bold;
+            color: #00ffff;
+            font-size: 1.1rem;
+        }
+
+        /* 环形进度图 */
+        .circular-progress {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: conic-gradient(
+                #0066ff 0deg,
+                #00ffff var(--progress),
+                #2a2a2a var(--progress)
+            );
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            margin: 2rem auto;
+            animation: rotateProgress 3s ease-in-out;
+        }
+
+        @keyframes rotateProgress {
+            from { --progress: 0deg; }
+        }
+
+        .circular-progress::before {
+            content: '';
+            width: 160px;
+            height: 160px;
+            background: #1e1e1e;
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .circular-progress-text {
+            position: relative;
+            z-index: 1;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #00ffff;
+        }
+
+        /* 增长箭头动画 */
+        .growth-arrow {
+            display: inline-block;
+            color: #00ff88;
+            font-size: 2rem;
+            margin-left: 1rem;
+            animation: arrowBounce 1.5s ease-in-out infinite;
+        }
+
+        @keyframes arrowBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* 脉冲点 */
+        .pulse-dot {
+            width: 20px;
+            height: 20px;
+            background: #00ffff;
+            border-radius: 50%;
+            display: inline-block;
+            margin: 0 10px;
+            animation: pulseDot 2s ease-in-out infinite;
+            box-shadow: 0 0 20px #00ffff;
+        }
+
+        @keyframes pulseDot {
+            0%, 100% { 
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% { 
+                transform: scale(1.5);
+                opacity: 0.5;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 3rem; }
+            h2 { font-size: 2rem; }
+            .subtitle { font-size: 1.3rem; }
+            .cards-grid { grid-template-columns: 1fr; padding: 1.5rem; }
+            .big-stat { font-size: 3rem; }
+            .floating-back-button {
+                width: 60px;
+                height: 60px;
+                bottom: 20px;
+                right: 20px;
+            }
+            .chart-bar {
+                width: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="particles-canvas"></canvas>
+    
+    <!-- 浮动返回主页按钮 -->
+    <div class="floating-back-button" id="floatingBackBtn" onclick="showHome()"></div>
+
+    <!-- 主页 -->
+    <div id="home" class="page active">
+        <div class="hero">
+            <div class="hero-glow" style="top: 20%; left: 30%;"></div>
+            <div class="hero-glow" style="top: 60%; left: 70%; animation-delay: 1s;"></div>
+            <h1>ChatGPT 使用研究</h1>
+            <p class="subtitle">全球 AI 采用的开创性研究</p>
+            <p class="authors">Chatterji, Cunningham, Deming, Hitzig, Ong, Shan, Wadman | NBER 2025</p>
+        </div>
+
+        <div class="cards-grid">
+            <div class="interactive-card" onclick="showDetail('global')">
+                <div class="card-icon">🌍</div>
+                <div class="card-title">全球普及规模</div>
+                <div class="card-description">史无前例的采用速度</div>
+                <div class="card-stat">7亿</div>
+                <p>周活跃用户</p>
+                <div class="learn-more">查看详情 →</div>
+            </div>
+
+            <div class="interactive-card" onclick="showDetail('usage')">
+                <div class="card-icon">💼</div>
+                <div class="card-title">工作 vs 个人使用</div>
+                <div class="card-description">使用场景的演变</div>
+                <div class="card-stat">70%</div>
+                <p>非工作相关</p>
+                <div class="learn-more">查看详情 →</div>
+            </div>
+
+            <div class="interactive-card" onclick="showDetail('topics')">
+                <div class="card-icon">📊</div>
+                <div class="card-title">热门对话主题</div>
+                <div class="card-description">用户最关心什么</div>
+                <div class="card-stat">80%</div>
+                <p>集中在三大类</p>
+                <div class="learn-more">查看详情 →</div>
+            </div>
+
+            <div class="interactive-card" onclick="showDetail('interaction')">
+                <div class="card-icon">🎯</div>
+                <div class="card-title">交互方式</div>
+                <div class="card-description">用户如何使用 AI</div>
+                <div class="card-stat">49%</div>
+                <p>寻求建议</p>
+                <div class="learn-more">查看详情 →</div>
+            </div>
+
+            <div class="interactive-card" onclick="showDetail('demographics')">
+                <div class="card-icon">👥</div>
+                <div class="card-title">人口统计洞察</div>
+                <div class="card-description">谁在使用 ChatGPT</div>
+                <div class="card-stat">52%</div>
+                <p>女性用户</p>
+                <div class="learn-more">查看详情 →</div>
+            </div>
+
+            <div class="interactive-card" onclick="showDetail('writing')">
+                <div class="card-icon">✍️</div>
+                <div class="card-title">写作主导工作</div>
+                <div class="card-description">最常见的工作用途</div>
+                <div class="card-stat">40%</div>
+                <p>工作消息</p>
+                <div class="learn-more">查看详情 →</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 详情页：全球普及 -->
+    <div id="detail-global" class="page">
+        <div class="detail-page">
+            <button class="back-button" onclick="showHome()">← 返回主页</button>
+            
+            <div class="detail-header">
+                <div class="card-icon">🌍</div>
+                <h2>全球普及规模</h2>
+                <p class="subtitle">ChatGPT 的指数级增长</p>
+            </div>
+
+            <div class="detail-section">
+                <h3 style="color: #00ffff; font-size: 2rem; margin-bottom: 2rem;">📈 惊人的用户增长</h3>
+                
+                <!-- 增长图表插图 -->
+                <div class="chart-illustration">
+                    <div class="chart-bar" data-value="1M" data-label="2022/12" style="height: 0;" data-height="20"></div>
+                    <div class="chart-bar" data-value="100M" data-label="2023/12" style="height: 0;" data-height="100"></div>
+                    <div class="chart-bar" data-value="350M" data-label="2024/12" style="height: 0;" data-height="150"></div>
+                    <div class="chart-bar" data-value="700M" data-label="2025/07" style="height: 0;" data-height="200"></div>
+                </div>
+                
+                <div class="stat-box">
+                    <h4 style="color: #0066ff; font-size: 1.5rem;">周活跃用户</h4>
+                    <div class="big-stat"><span class="animate-number" data-target="700">0</span>M <span class="growth-arrow">↗</span></div>
+                    <p style="font-size: 1.2rem;">占全球成年人口的约 <span class="highlight"><span class="animate-number" data-target="10">0</span>%</span></p>
+                </div>
+
+                <div class="stat-box">
+                    <h4 style="color: #0066ff; font-size: 1.5rem;">每日消息量</h4>
+                    <div class="big-stat"><span class="animate-number" data-target="25">0</span>亿 <span class="growth-arrow">↗</span></div>
+                    <p style="font-size: 1.2rem;">相当于每秒 <span class="highlight"><span class="animate-number" data-target="29000">0</span> 条消息</span></p>
+                </div>
+            </div>
+
+            <div class="detail-section">
+                <h3 style="color: #00ffff; font-size: 2rem; margin-bottom: 2rem;">⚡ 史无前例的采用速度</h3>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <h4 style="color: #00ffff; font-size: 1.5rem;">2022年11月</h4>
+                        <p style="font-size: 1.1rem;">ChatGPT 公开发布</p>
+                        <p style="margin-top: 0.5rem; color: #888;">仅用 <span class="highlight">5天</span> 突破 100万用户</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4 style="color: #00ffff; font-size: 1.5rem;">2023年12月</h4>
+                        <p style="font-size: 1.1rem;">第一年突破 1亿 WAU</p>
+                        <p style="margin-top: 0.5rem; color: #888;">成为历史上增长最快的消费应用</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4 style="color: #00ffff; font-size: 1.5rem;">2025年7月</h4>
+                        <p style="font-size: 1.1rem;">达到 7亿 周活跃用户</p>
+                        <p style="margin-top: 0.5rem; color: #888;">两年半时间内增长 <span class="highlight">700倍</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="detail-section">
+                <h3 style="color: #00ffff; font-size: 2rem; margin-bottom: 2rem;">🌏 地域分布</h3>
+                <p style="font-size: 1.2rem; margin-bottom: 2rem;">ChatGPT 的使用在过去一年中在<span class="highlight">中低收入国家</span>增长尤为迅速，显示出 AI 技术的全球普及趋势。</p>
+                <div class="feature-grid">
+                    <div class="feature-box">
+                        <h4 style="color: #0066ff; font-size: 1.3rem; margin-bottom: 1rem;">🇺🇸 高收入国家</h4>
+                        <p>早期采用者，增长稳定</p>
+                    </div>
+                    <div class="feature-box">
+                        <h4 style="color: #0066ff; font-size: 1.3rem; margin-bottom: 1rem;">🌏 中等收入国家</h4>
+                        <p>增长最快的市场</p>
+                    </div>
+                    <div class="feature-box">
+                        <h4 style="color: #0066ff; font-size: 1.3rem; margin-bottom: 1rem;">🌍 低收入国家</h4>
+                        <p>持续上升的采用率</p>
+                    </div>
+                    <div class="feature-box">
+                        <h4 style="color: #0066ff; font-size: 1.3rem; margin-bottom: 1rem;">🌐 全球覆盖</h4>
+                        <p>跨越经济发展水平</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 详情页：工作 vs 个人 -->
+    <div id="detail-usage" class="page">
+        <div class="detail-page">
+            <button class="back-button" onclick="showHome()">← 返回主页</button>
+            
+            <div class="detail-header">
+                <div class="card-icon">💼</div>
+                <h2>工作 vs 个人使用</h2>
+                <p class="subtitle">使用场景的重大转变</p>
+            </div>
+
+            <div class="detail-section">
+                <h3 style="color: #00ffff; font-size: 2rem; margin-bottom: 2rem;">📊 使用比例演变</h3>
+                <p style="font-size: 1.2rem; margin-bottom: 2rem;">尽管最初的预期是作为生产力工具，ChatGPT 已经演变成主要的<span class="highlight">个人助手</span>。</p>
+                
+                <div style="display: flex; justify-content: space-around; flex-wrap: wrap; margin: 3rem 0;">
+                    <div style="text-align: center; margin: 1rem;">
+                        <h4 style="color: #0066ff; margin-bottom: 1rem;">2024年6月</h4>
+                        <div class="circular-progress" style="--progress: 169deg;">
+                            <div class="circular-progress-text"><span class="animate-number" data-target="47">0</span>%</div>
+                        </div>
+                        <p style="margin-top: 1rem;">工作相关</p>
+                    </div>
+                    <div style="text-align: center; margin: 1rem;">
+                        <h4 style="color: #0066ff; margin-bottom: 1rem;">2025年6月</h4>
+                        <div class="circular-progress" style="--progress: 97deg;">
+                            <div class="circular-progress-text"><span class="animate-number" data-target="27">0</span>%</div>
+                        </div>
+                        <p style="margin-top: 1rem;">工作相关</p>
+                        <p style="margin-top: 0.5rem; color: #00ff88;">▼ 下降 20%</p>
+                    </div>
+                </div>
+                
+                <h4 style="color: #0066ff; margin: 2rem 0 1rem;">2024年6月</h4>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" data-width="47" style="width: 0%;">
+                        <span><span class="animate-number" data-target="47">0</span>% 工作相关</span>
+                    </div>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" data-width="53" style="width: 0%; background: linear-gradient(90deg, #888, #aaa);">
+                        <span><span class="animate-number" data-target="53">0</span>% 非工作相关</span>
+                    </div>
+                </div>
+
+                <h4 style="color: #0066ff; margin: 3rem 0 1rem;">2025年6月</h4>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" data-width="27" style="width: 0%;">
+                        <span><span class="animate-number" data-target="27">0</span>% 工作相关</span>
+                    </div>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" data-width="73" style="width: 0%; background: linear-gradient(90deg, #00ff88, #00ffff);">
+                        <span><span class="animate-number" data-target="73">0</span>% 非工作相关</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="detail-section">
+                <h3 style="color: #00ffff; font-size: 2rem; margin-bottom: 2rem;">🏠 非工作使用场景</h3>
+                <div class="feature-grid">
+                    <div class="feature-box">
+                        <h4 style="color: #0066ff; font-size: 1.3rem; margin-bottom: 1rem;">📚 学习与教育</h4>
+                        <p>辅导、解答问题、知识探索</p>
+                    </div>
+                    <div class="feature-box">
+                        <h4 style="color: #0066ff; font-size: 1.3rem; margin-bottom: 1rem;">💡 创意灵感</h4>
+                        <p>头脑风暴、创意建议、艺术创作</p>
+                    </div>
+                    <div class="feature-box">
+                        <h4 style="color: #0066ff; font-size: 1.3rem; margin-bottom: 1rem;">🍳 生活助手</h4>
+                        <p>食谱、健身计划、日常建议</p>
+                    </div>
+                    <div class="feature-box">
+                        <h4 style="color: #0066ff; font-size: 1.3rem; margin-bottom: 1rem;">🎮 娱乐休闲</h4>
+                        <p>游戏、故事创作、角色扮演</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="detail-section">
+                <h3 style="color: #00ffff; font-size: 2rem; margin-bottom: 2rem;">💰 经济价值评估</h3>
+                <div class="stat-box">
+                    <h4 style="color: #0066ff; font-size: 1.5rem;">美国市场消费者剩余</h4>
+                    <div class="big-stat">$<span class="animate-number" data-target="970">0</span>亿 <span class="growth-arrow">↗</span></div>
+                    <p style="font-size: 1.2rem;">仅 2024 年的估计价值</p>
+                    <p style="margin-top: 1rem; color: #888;">来源：Collis & Brynjolfsson (2025) 的选择实验研究</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 详情页：热门主题 -->
+    <div id="detail-topics" class="page">
+        <div class="detail-page">
+            <button class="back-button" onclick="showHome()">← 返回主页</button>
+            
+            <div class="detail-header">
+                <div class="card-icon">📊</div>
+                <h2>热门对话主题</h2>
+                <p class="subtitle">用户最关心什么</p>
+            </div>
+
+            <div class="detail-section">
+                <h3 style="color: #00ffff; font-size: 2rem; margin-bottom: 2rem;">🔝 前三大主题（占总使用的 <span class="animate-number" data-target="77">0</span>%）</h3>
+                
+                <div class="stat-box" style="margin: 2rem 0;">
+                    <div class="card-icon" style="font-size: 3rem;">🎯</div>
+                    <h4 style="color: #0066ff; font-size: 1.8rem;">1. 实用指导 <span class="pulse-dot"></span></h4>
+                    <div class="big-stat" style="font-size: 3.5rem;"><span class="animate-number" data-target="29">0</span>%</div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" data-width="29" style="width: 0%;"></div>
+                    </div>
+                    <p style="font-size: 1.1rem; margin-top: 1rem;">辅导教学、操作指南、创意构思、健康美容建议</p>
+                </div>
+
+                <div class="stat-box" style="margin: 2rem 0;">
+                    <div class="card-icon" style="font-size: 3rem;">🔍</div>
+                    <h4 style="color: #0066ff; font-size: 1.8rem;">2. 寻找信息 <span class="pulse-dot"></span></h4>
+                    <div class="big-stat" style="font-size: 3.5rem;"><span class="animate-number" data-target="24">0</span>%</div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" data-width="24" style="width: 0%;"></div>
+                    </div>
+                    <p style="font-size: 1.1rem; margin-top: 1rem;">搜索事实、时事新闻、产品推荐、食谱查询</p>
+                </div>
+
+                <div class="stat-box" style="margin: 2rem 0;">
+                    <div class="card-icon" style="font-size: 3rem;">✍️</div>
+                    <h4 style="color: #0066ff; font-size: 1.8rem;">3. 写作 <span class="pulse-dot"></span></h4>
+                    <div class="big-stat" style="font-size: 3.5rem;"><span class="animate-number" data-target="24">0</span>%</div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" data-width="24" style="width: 0%;"></div>
+                    </div>
+                    <p style="font-size: 1.1rem; margin-top: 1rem;">邮件撰写、文档创建、编辑修改、摘要总结、文本翻译</p>
+                </div>
+            </div>
+
+            <div class="detail-section">
+                <h3 style="color: #00ffff; font-size: 2rem; margin-bottom: 2rem;">📚 教育影响</h3>
+                <div class="stat-box">
+                    <h4 style="color: #0066ff; font-size: 1.5rem;">辅导和教学请求</h4>
+                    <div class="big-stat"><span class="animate-number" data-target="10.2">0</span>% <span class="growth-arrow">↗</span></div>
+                    <p style="font-size: 1.2rem;">所有消息中，表明<span class="highlight">教育是重要用例</span></p>
+                </div>
+            </div>
+
+            <div class="detail-section">
+                <h3 style="color: #00ffff; font-size: 2rem; margin-bottom: 2rem;">💻 令人惊讶的发现</h3>
+                <div class="feature-grid">
+                    <div class="feature-box">
+                        <h4 style="color: #0066ff; font-size: 1.3rem; margin-bottom: 1rem;">💻 编程占比低</h4>
+                        <div style="font-size: 2rem; font-weight: bold; color: #00ffff; margin: 1rem 0;"><span class="animate-number" data-target="4.2">0</span>%</div>
+                        <p>远低于预期，大部分编程可能通过 API 完成</p>
+                    </div>
+                    <div class="feature-box">
+                        <h4 style="color: #0066ff; font-size: 1.3rem; margin-bottom: 1rem;">💬 社交陪伴少</h4>
+                        <div style="font-size: 2rem; font-weight: bold; color: #00ffff; margin: 1rem 0;"><span class="animate-number" data-target="1.9">0</span>%</div>
+                        <p>关系与个人反思主题占比很小</p>
+                    </div>
+                    <div class="feature-box">
+                        <h4 style="color: #0066ff; font-size: 1.3rem; margin-bottom: 1rem;">🎮 游戏角色扮演</h4>
+                        <div style="font-size: 2rem; font-weight: bold; color: #00ffff; margin: 1rem 0;"><span class="animate-number" data-target="0.4">0</span>%</div>
+                        <p>游戏和角色扮演使用较少</p>
+                    </div>
+                    <div class="feature-box">
+                        <h4 style="color: #0066ff; font-size: 1.3rem; margin-bottom: 1rem;">📝 写作修改为主</h4>
+                        <div style="font-size: 2rem; font-weight: bold; color: #00ffff; margin: 1rem 0;"><span class="animate-number" data-target="67">0</span>%</div>
+                        <p>写作消息中，2/3 是修改已有文本而非从零创建</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 详情页：交互方式 -->
+    <div id="detail-interaction" class="page">
+        <div class="detail-page">
+            <button class="back-button" onclick="showHome()">← 返回主页</button>
+            
+            <div class="detail-header">
+                <div class="card-icon">🎯</div>
+                <h2>用户交互方式</h2>
+                <p class="subtitle">寻求、执行还是表达？</p>
+            </div>
+
+            <div class="detail-section">
+                <h3 style="color: #00ffff; font-size: 2rem; margin-bottom: 2rem;">🎭 三种核心交互模式</h3>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <h4 style="color: #00ffff; font-size: 1.8rem;">询问型（Asking）</h4>
+                        <div class="big-stat" style="font-size: 3rem;"><span class="animate-number" data-target="49">0</span>%</div>
+                        <p style="font-size: 1.2rem; margin-top: 1rem;">寻求信息或建议以做出更好决策</p>
+                        <p style="margin-top: 1rem; color: #888;">示例："林肯之后谁是总统？"、"如何为本季度创建预算？"</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4 style="color: #00ffff; font-size: 1.8rem;">执行型（Doing）</h4>
+                        <div class="big-stat" style="font-size: 3rem;"><span class="animate-number" data-target="40">0</span>%</div>
+                        <p style="font-size: 1.2rem; margin-top: 1rem;">要求 ChatGPT 执行任务或生成可直接使用的输出</p>
+                        <p style="margin-top: 1rem; color: #888;">示例："将此邮件改得更正式"、"编写总结 ChatGPT 用例的报告"</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4 style="color: #00ffff; font-size: 1.8rem;">表达型（Expressing）</h4>
+                        <div class="big-stat" style="font-size: 3rem;"><span class="animate-number" data-target="11">0</span>%</div>
+                        <p style="font-size: 1.2rem; margin-top: 1rem;">既不寻求信息也不要求执行任务的表达性消息</p>
+                        <p style="margin-top: 1rem; color: #888;">示例："你好！"、"我今天过得很棒"</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="detail-section">
+                <h3 style="color: #00ffff; font-size: 2rem; margin-bottom: 2rem;">📈 增长趋势</h3>
+                <p style="font-size: 1.2rem; margin-bottom: 2rem;"><span class="highlight">询问型</span>消息增长速度超过执行型，表明用户越来越将 ChatGPT 视为<span class="highlight">决策辅助工具</span>而非单纯的任务执行工具。</p>
+                
+                <div class="feature-grid">
+                    <div class="feature-box">
+                        <h4 style="color: #0066ff; font-size: 1.3rem;">📊 2024年7月</h4>
+                        <p style="font-size: 1.1rem; margin: 1rem 0;">询问型和执行型大致持平</p>
+                    </div>
+                    <div class="feature-box">
+                        <h4 style="color: #0066ff; font-size: 1.3rem;">📊 2025年6月</h4>
+                        <p style="font-size: 1.1rem; margin: 1rem 0;">询问型占 51.6%，执行型降至 34.6%</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="detail-section">
+                <h3 style="color: #00ffff; font-size: 2rem; margin-bottom: 2rem;">⭐ 用户满意度</h3>
+                <div class="stat-box">
+                    <p style="font-size: 1.3rem; margin-bottom: 2rem;"><span class="highlight">询问型</span>消息获得的用户满意度评分<span class="highlight">明显更高</span></p>
+                    <div class="feature-grid">
+                        <div class="feature-box">
+                            <h4 style="color: #0066ff;">询问型</h4>
+                            <div style="font-size: 2.5rem; font-weight: bold; color: #00ffff; margin: 1rem 0;">4.5/5</div>
+                            <p>好评率最高</p>
+                        </div>
+                        <div class="feature-box">
+                            <h4 style="color: #0066ff;">执行型</h4>
+                            <div style="font-size: 2.5rem; font-weight: bold; color: #00ffff; margin: 1rem 0;">3.7/5</div>
+                            <p>中等满意度</p>
+                        </div>
+                        <div class="feature-box">
+                            <h4 style="color: #0066ff;">表达型</h4>
+                            <div style="font-size: 2.5rem; font-weight: bold; color: #00ffff; margin: 1rem 0;">2.8/5</div>
+                            <p>满意度相对较低</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 详情页：人口统计 -->
+    <div id="detail-demographics" class="page">
+        <div class="detail-page">
+            <button class="back-button" onclick="showHome()">← 返回主页</button>
+            
+            <div class="detail-header">
+                <div class="card-icon">👥</div>
+                <h2>人口统计洞察</h2>
+                <p class="subtitle">谁在使用 ChatGPT？</p>
+            </div>
+
+            <div class="detail-section">
+                <h3 style="color: #00ffff; font-size: 2rem; margin-bottom: 2rem;">⚖️ 性别差距已消除</h3>
+                <p style="font-size: 1.2rem; margin-bottom: 2rem;">从发布时的严重失衡到现在的<span class="highlight">性别平衡</span>，ChatGPT 的用户群体经历了显著变化。</p>
+                
+                <div class="stat-box" style="margin: 2rem 0;">
+                    <h4 style="color: #0066ff; font-size: 1.5rem;">2022年12月 - 发布初期</h4>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" data-width="80" style="width: 0%; background: linear-gradient(90deg, #0066ff, #4488ff);">
+                            <span>80% 男性用户</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-box" style="margin: 2rem 0;">
+                    <h4 style="color: #0066ff; font-size: 1.5rem;">2025年6月 - 当前</h4>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" data-width="52" style="width: 0%; background: linear-gradient(90deg, #ff6b9d, #ffa8c5);">
+                            <span>52% 女性用户</span>
+                        </div>
+                    </div>
+                    <p style="margin-top: 1rem; font-size: 1.1rem; color: #888;">性别差距已基本消除</p>
+                </div>
+            </div>
+
+            <div class="detail-section">
+                <h3 style="color: #00ffff; font-size: 2rem; margin-bottom: 2rem;">🎂 年龄分布</h3>
+                <div class="stat-box">
+                    <div class="big-stat"><span class="animate-number" data-target="46">0</span>% <span class="growth-arrow">↗</span></div>
+                    <p style="font-size: 1.2rem;">成年用户发送的消息来自<span class="highlight">26岁以下</span>的用户</p>
+                </div>
+
+                <div style="margin-top: 2rem;">
+                    <h4 style="color: #0066ff; font-size: 1.3rem; margin-bottom: 1.5rem;">工作相关消息按年龄段</h4>
+                    <p style="margin-bottom: 1rem;">18-25岁：</p>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" data-width="23" style="width: 0%;"><span class="animate-number" data-target="23">0</span>%</div>
+                    </div>
+                    
+                    <p style="margin: 1.5rem 0 1rem;">26-35岁：</p>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" data-width="31" style="width: 0%;"><span class="animate-number" data-target="31">0</span>%</div>
+                    </div>
+                    
+                    <p style="margin: 1.5rem 0 1rem;">36-55岁：</p>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" data-width="29" style="width: 0%;"><span class="animate-number" data-target="29">0</span>%</div>
+                    </div>
+                    
+                    <p style="margin: 1.5rem 0 1rem;">56-65岁：</p>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" data-width="30" style="width: 0%;"><span class="animate-number" data-target="30">0</span>%</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="detail-section">
+                <h3 style="color: #00ffff; font-size: 2rem; margin-bottom: 2rem;">🎓 教育背景影响</h3>
+                <p style="font-size: 1.2rem; margin-bottom: 2rem;">受过高等教育的用户更倾向于将 ChatGPT 用于<span class="highlight">工作相关任务</span>。</p>
+                
+                <div class="feature-grid">
+                    <div class="feature-box">
+                        <h4 style="color: #0066ff; font-size: 1.3rem;">本科以下</h4>
+                        <div style="font-size: 2.5rem; font-weight: bold; color: #00ffff; margin: 1rem 0;"><span class="animate-number" data-target="37">0</span>%</div>
+                        <p>工作相关消息比例</p>
+                    </div>
+                    <div class="feature-box">
+                        <h4 style="color: #0066ff; font-size: 1.3rem;">本科学历</h4>
+                        <div style="font-size: 2.5rem; font-weight: bold; color: #00ffff; margin: 1rem 0;"><span class="animate-number" data-target="46">0</span>%</div>
+                        <p>工作相关消息比例</p>
+                    </div>
+                    <div class="feature-box">
+                        <h4 style="color: #0066ff; font-size: 1.3rem;">研究生学历</h4>
+                        <div style="font-size: 2.5rem; font-weight: bold; color: #00ffff; margin: 1rem 0;"><span class="animate-number" data-target="48">0</span>%</div>
+                        <p>工作相关消息比例</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="detail-section">
+                <h3 style="color: #00ffff; font-size: 2rem; margin-bottom: 2rem;">💼 职业差异</h3>
+                <div class="feature-grid">
+                    <div class="feature-box">
+                        <h4 style="color: #0066ff; font-size: 1.3rem; margin-bottom: 1rem;">💻 技术职位</h4>
+                        <div style="font-size: 2rem; font-weight: bold; color: #00ffff; margin: 1rem 0;"><span class="animate-number" data-target="57">0</span>%</div>
+                        <p>计算机相关职业工作消息比例最高</p>
+                    </div>
+                    <div class="feature-box">
+                        <h4 style="color: #0066ff; font-size: 1.3rem; margin-bottom: 1rem;">📊 管理与商业</h4>
+                        <div style="font-size: 2rem; font-weight: bold; color: #00ffff; margin: 1rem 0;"><span class="animate-number" data-target="50">0</span>%</div>
+                        <p>高度依赖写作功能</p>
+                    </div>
+                    <div class="feature-box">
+                        <h4 style="color: #0066ff; font-size: 1.3rem; margin-bottom: 1rem;">🔬 工程与科学</h4>
+                        <div style="font-size: 2rem; font-weight: bold; color: #00ffff; margin: 1rem 0;"><span class="animate-number" data-target="48">0</span>%</div>
+                        <p>偏好询问型交互</p>
+                    </div>
+                    <div class="feature-box">
+                        <h4 style="color: #0066ff; font-size: 1.3rem; margin-bottom: 1rem;">👔 其他专业职位</h4>
+                        <div style="font-size: 2rem; font-weight: bold; color: #00ffff; margin: 1rem 0;"><span class="animate-number" data-target="44">0</span>%</div>
+                        <p>教育、法律、医疗等</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 详情页：写作主导 -->
+    <div id="detail-writing" class="page">
+        <div class="detail-page">
+            <button class="back-button" onclick="showHome()">← 返回主页</button>
+            
+            <div class="detail-header">
+                <div class="card-icon">✍️</div>
+                <h2>写作主导工作任务</h2>
+                <p class="subtitle">最常见的工作用途</p>
+            </div>
+
+            <div class="detail-section">
+                <h3 style="color: #00ffff; font-size: 2rem; margin-bottom: 2rem;">📝 工作消息中的写作占比</h3>
+                <div class="stat-box">
+                    <div class="big-stat">40%</div>
+                    <p style="font-size: 1.2rem;">截至2025年7月，所有工作相关消息中<span class="highlight">写作是最常见的用例</span></p>
+                </div>
+
+                <div style="margin-top: 2rem;">
+                    <h4 style="color: #0066ff; font-size: 1.5rem; margin: 2rem 0 1rem;">各职业的写作占比</h4>
+                    <p style="margin-bottom: 1rem;">管理与商业：</p>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" data-width="52" style="width: 0%;">52%</div>
+                    </div>
+                    
+                    <p style="margin: 1.5rem 0 1rem;">其他专业职位：</p>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" data-width="49" style="width: 0%;">49%</div>
+                    </div>
+                    
+                    <p style="margin: 1.5rem 0 1rem;">非专业职位：</p>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" data-width="50" style="width: 0%;">50%</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="detail-section">
+                <h3 style="color: #00ffff; font-size: 2rem; margin-bottom: 2rem;">🔍 写作任务细分</h3>
+                <p style="font-size: 1.2rem; margin-bottom: 2rem;">约 <span class="highlight">2/3 的写作消息</span>涉及修改用户提供的文本，而非从头创建新内容。</p>
+                
+                <div class="feature-grid">
+                    <div class="feature-box">
+                        <h4 style="color: #0066ff; font-size: 1.3rem; margin-bottom: 1rem;">📋 编辑和批评</h4>
+                        <p style="font-size: 1.1rem;">改进或修改用户提供的文本</p>
+                        <div style="margin-top: 1rem; font-size: 1.5rem; font-weight: bold; color: #00ffff;">最常见</div>
+                    </div>
+                    <div class="feature-box">
+                        <h4 style="color: #0066ff; font-size: 1.3rem; margin-bottom: 1rem;">🌐 翻译</h4>
+                        <p style="font-size: 1.1rem;">将文本从一种语言翻译成另一种语言</p>
+                        <div style="margin-top: 1rem; font-size: 1.5rem; font-weight: bold; color: #00ffff;">第三常见</div>
+                    </div>
+                    <div class="feature-box">
+                        <h4 style="color: #0066ff; font-size: 1.3rem; margin-bottom: 1rem;">📄 摘要生成</h4>
+                        <p style="font-size: 1.1rem;">创建论点或主题摘要</p>
+                        <div style="margin-top: 1rem; font-size: 1.5rem; font-weight: bold; color: #00ffff;">第四常见</div>
+                    </div>
+                    <div class="feature-box">
+                        <h4 style="color: #0066ff; font-size: 1.3rem; margin-bottom: 1rem;">✉️ 个人写作</h4>
+                        <p style="font-size: 1.1rem;">协助撰写消息、邮件或社交媒体帖子</p>
+                        <div style="margin-top: 1rem; font-size: 1.5rem; font-weight: bold; color: #00ffff;">第二常见</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="detail-section">
+                <h3 style="color: #00ffff; font-size: 2rem; margin-bottom: 2rem;">💡 关键洞察</h3>
+                <div class="stat-box">
+                    <p style="font-size: 1.3rem; line-height: 2;">
+                        写作的高频使用凸显了两个重要特点：<br><br>
+                        <span class="highlight">1. 通用技能</span> - 写作是几乎所有白领工作的共同需求<br><br>
+                        <span class="highlight">2. AI 优势</span> - 生成式 AI 能够生成长文本输出，这是其相对于传统搜索引擎的独特能力
+                    </p>
+                </div>
+            </div>
+
+            <div class="detail-section">
+                <h3 style="color: #00ffff; font-size: 2rem; margin-bottom: 2rem;">📈 生产力影响</h3>
+                <p style="font-size: 1.2rem; margin-bottom: 2rem;">通过提供<span class="highlight">决策支持</span>而非仅仅自动化任务，ChatGPT 在知识密集型工作中提供经济价值，这些工作中更好的决策能提高生产力。</p>
+                
+                <div class="feature-grid">
+                    <div class="feature-box">
+                        <h4 style="color: #0066ff;">📊 信息获取</h4>
+                        <div style="font-size: 2rem; font-weight: bold; color: #00ffff; margin: 1rem 0;">19.3%</div>
+                        <p>最常见的工作活动</p>
+                    </div>
+                    <div class="feature-box">
+                        <h4 style="color: #0066ff;">🧠 决策与问题解决</h4>
+                        <div style="font-size: 2rem; font-weight: bold; color: #00ffff; margin: 1rem 0;">14.9%</div>
+                        <p>第二常见的工作活动</p>
+                    </div>
+                    <div class="feature-box">
+                        <h4 style="color: #0066ff;">💡 创造性思考</h4>
+                        <div style="font-size: 2rem; font-weight: bold; color: #00ffff; margin: 1rem 0;">13.0%</div>
+                        <p>第三常见的工作活动</p>
+                    </div>
+                    <div class="feature-box">
+                        <h4 style="color: #0066ff;">📝 文档记录</h4>
+                        <div style="font-size: 2rem; font-weight: bold; color: #00ffff; margin: 1rem 0;">18.4%</div>
+                        <p>工作消息中最常见</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 保存滚动位置
+        let savedScrollPosition = 0;
+
+        // 粒子背景动画
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 1;
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.speedY = Math.random() * 0.5 - 0.25;
+                this.color = Math.random() > 0.5 ? '#0066ff' : '#00ffff';
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x > canvas.width) this.x = 0;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0;
+                if (this.y < 0) this.y = canvas.height;
+            }
+
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = 0.3;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        const particles = [];
+        for (let i = 0; i < 100; i++) {
+            particles.push(new Particle());
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+
+            // 连接近距离的粒子
+            particles.forEach((a, i) => {
+                particles.slice(i + 1).forEach(b => {
+                    const dx = a.x - b.x;
+                    const dy = a.y - b.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < 100) {
+                        ctx.strokeStyle = a.color;
+                        ctx.globalAlpha = 0.1 * (1 - distance / 100);
+                        ctx.lineWidth = 0.5;
+                        ctx.beginPath();
+                        ctx.moveTo(a.x, a.y);
+                        ctx.lineTo(b.x, b.y);
+                        ctx.stroke();
+                    }
+                });
+            });
+
+            requestAnimationFrame(animateParticles);
+        }
+
+        animateParticles();
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // 数字增长动画
+        function animateNumber(element, target, duration = 2000) {
+            const start = 0;
+            const increment = target / (duration / 16);
+            let current = start;
+
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    element.textContent = Math.round(target);
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.round(current);
+                }
+            }, 16);
+        }
+
+        function triggerNumberAnimations() {
+            const numbers = document.querySelectorAll('.animate-number');
+            numbers.forEach(num => {
+                const target = parseInt(num.getAttribute('data-target'));
+                if (target && !num.classList.contains('animated')) {
+                    num.classList.add('animated');
+                    animateNumber(num, target);
+                }
+            });
+        }
+
+        // 图表柱状图动画
+        function animateChartBars() {
+            const bars = document.querySelectorAll('.chart-bar');
+            bars.forEach((bar, index) => {
+                setTimeout(() => {
+                    const height = bar.getAttribute('data-height');
+                    bar.style.height = height + 'px';
+                }, index * 200);
+            });
+        }
+
+        // 页面导航
+        function showDetail(page) {
+            // 保存当前滚动位置
+            savedScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+            
+            document.getElementById('home').classList.remove('active');
+            document.getElementById('detail-' + page).classList.add('active');
+            
+            // 显示浮动返回按钮
+            const floatingBtn = document.getElementById('floatingBackBtn');
+            setTimeout(() => {
+                floatingBtn.classList.add('visible');
+            }, 500);
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            // 触发动画
+            setTimeout(() => {
+                animateProgressBars();
+                triggerNumberAnimations();
+                animateChartBars();
+            }, 300);
+        }
+
+        function showHome() {
+            // 隐藏浮动按钮
+            const floatingBtn = document.getElementById('floatingBackBtn');
+            floatingBtn.classList.remove('visible');
+            
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById('home').classList.add('active');
+            
+            // 恢复之前的滚动位置
+            setTimeout(() => {
+                window.scrollTo({ top: savedScrollPosition, behavior: 'smooth' });
+            }, 100);
+            
+            // 重置所有动画数字
+            document.querySelectorAll('.animate-number').forEach(num => {
+                num.classList.remove('animated');
+            });
+        }
+
+        // 进度条动画
+        function animateProgressBars() {
+            const progressBars = document.querySelectorAll('.progress-bar[data-width]');
+            progressBars.forEach(bar => {
+                const width = bar.getAttribute('data-width');
+                bar.style.width = width + '%';
+            });
+        }
+
+        // 页面加载时动画主页进度条
+        window.addEventListener('load', () => {
+            setTimeout(animateProgressBars, 500);
+        });
+
+        // 监听滚动以触发动画
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                    
+                    // 触发数字动画
+                    const numbers = entry.target.querySelectorAll('.animate-number');
+                    numbers.forEach(num => {
+                        const target = parseInt(num.getAttribute('data-target'));
+                        if (target && !num.classList.contains('animated')) {
+                            num.classList.add('animated');
+                            animateNumber(num, target);
+                        }
+                    });
+                    
+                    // 触发图表动画
+                    if (entry.target.querySelector('.chart-bar')) {
+                        animateChartBars();
+                    }
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.detail-section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // 3D鼠标跟随效果
+        document.addEventListener('mousemove', (e) => {
+            const cards = document.querySelectorAll('.interactive-card');
+            cards.forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                const rotateX = (y - centerY) / 20;
+                const rotateY = (centerX - x) / 20;
+
+                if (x > 0 && x < rect.width && y > 0 && y < rect.height) {
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-15px) scale(1.05)`;
+                }
+            });
+        });
+
+        document.addEventListener('mouseleave', () => {
+            const cards = document.querySelectorAll('.interactive-card');
+            cards.forEach(card => {
+                card.style.transform = '';
+            });
+        });
+
+        // 键盘快捷键 - ESC 返回主页
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const homePage = document.getElementById('home');
+                if (!homePage.classList.contains('active')) {
+                    showHome();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
