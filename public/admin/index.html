@@ -78,16 +78,23 @@
   </div>
 
   <script>
-    // 自定义预览模板
-    CMS.registerPreviewStyle("/styles.css");
-
-    // 当 CMS 加载完成后移除加载动画
+    // 等待 CMS 加载完成
     window.addEventListener('load', function() {
+      // 移除加载动画
       const loader = document.querySelector('.cms-loader');
       if (loader) {
         setTimeout(() => {
           loader.style.display = 'none';
         }, 1000);
+      }
+
+      // 等待 CMS 对象可用后再注册预览样式
+      if (window.CMS) {
+        try {
+          CMS.registerPreviewStyle("/styles.css");
+        } catch (e) {
+          console.log('预览样式注册失败:', e);
+        }
       }
     });
   </script>
