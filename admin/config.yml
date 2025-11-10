@@ -1,0 +1,245 @@
+backend:
+  name: git-gateway
+  branch: claude/admin-page-setup-011CUzG79DgmdsRH8rA2Y54y
+
+# 本地开发模式 (取消注释以使用本地后端)
+# local_backend: true
+
+media_folder: "assets/uploads"
+public_folder: "/assets/uploads"
+
+locale: "zh_Hans"
+
+collections:
+  # 首页设置
+  - name: "homepage"
+    label: "首页设置"
+    files:
+      - label: "首页内容"
+        name: "homepage"
+        file: "content/homepage.json"
+        fields:
+          - {label: "标题", name: "title", widget: "string", default: "巴黎创业知识库"}
+          - {label: "英文标题", name: "title_en", widget: "string", default: "Paris Entrepreneurship Knowledge Base"}
+          - {label: "表情符号", name: "emoji", widget: "string", default: "🚀"}
+          - label: "网站状态"
+            name: "status"
+            widget: "object"
+            fields:
+              - {label: "标题", name: "title", widget: "string", default: "网站状态"}
+              - label: "状态项"
+                name: "items"
+                widget: "list"
+                fields:
+                  - {label: "图标", name: "icon", widget: "string"}
+                  - {label: "内容", name: "text", widget: "string"}
+              - {label: "最后更新日期", name: "last_updated", widget: "datetime", format: "YYYY-MM-DD"}
+          - label: "页脚"
+            name: "footer"
+            widget: "object"
+            fields:
+              - {label: "文本", name: "text", widget: "string", default: "《移个朋友·巴黎创业》项目"}
+
+  # ChatGPT研究页面
+  - name: "research"
+    label: "ChatGPT研究页面"
+    files:
+      - label: "研究页面主信息"
+        name: "research_main"
+        file: "content/research_main.json"
+        fields:
+          - {label: "主标题", name: "main_title", widget: "string", default: "ChatGPT 使用研究"}
+          - {label: "副标题", name: "subtitle", widget: "string", default: "全球 AI 采用的开创性研究"}
+          - {label: "作者信息", name: "authors", widget: "text", default: "Chatterji, Cunningham, Deming, Hitzig, Ong, Shan, Wadman | NBER 2025"}
+
+      - label: "主题卡片"
+        name: "topic_cards"
+        file: "content/topic_cards.json"
+        fields:
+          - label: "卡片列表"
+            name: "cards"
+            widget: "list"
+            fields:
+              - {label: "ID", name: "id", widget: "string"}
+              - {label: "图标", name: "icon", widget: "string"}
+              - {label: "标题", name: "title", widget: "string"}
+              - {label: "描述", name: "description", widget: "string"}
+              - {label: "统计数字", name: "stat", widget: "string"}
+              - {label: "统计说明", name: "stat_description", widget: "string"}
+
+      - label: "全球普及详情"
+        name: "detail_global"
+        file: "content/detail_global.json"
+        fields:
+          - {label: "标题", name: "title", widget: "string"}
+          - {label: "副标题", name: "subtitle", widget: "string"}
+          - label: "用户增长数据"
+            name: "growth"
+            widget: "object"
+            fields:
+              - {label: "周活跃用户(百万)", name: "weekly_active_users", widget: "number"}
+              - {label: "全球成年人口占比", name: "global_percentage", widget: "number"}
+              - {label: "每日消息量(亿)", name: "daily_messages", widget: "number"}
+              - {label: "每秒消息数", name: "messages_per_second", widget: "number"}
+          - label: "时间线"
+            name: "timeline"
+            widget: "list"
+            fields:
+              - {label: "日期", name: "date", widget: "string"}
+              - {label: "标题", name: "title", widget: "string"}
+              - {label: "描述", name: "description", widget: "string"}
+
+      - label: "工作vs个人使用详情"
+        name: "detail_usage"
+        file: "content/detail_usage.json"
+        fields:
+          - {label: "标题", name: "title", widget: "string"}
+          - {label: "副标题", name: "subtitle", widget: "string"}
+          - label: "使用比例演变"
+            name: "usage_evolution"
+            widget: "object"
+            fields:
+              - label: "2024年6月"
+                name: "june_2024"
+                widget: "object"
+                fields:
+                  - {label: "工作相关比例", name: "work_percentage", widget: "number"}
+              - label: "2025年6月"
+                name: "june_2025"
+                widget: "object"
+                fields:
+                  - {label: "工作相关比例", name: "work_percentage", widget: "number"}
+          - label: "非工作使用场景"
+            name: "personal_use_cases"
+            widget: "list"
+            fields:
+              - {label: "图标", name: "icon", widget: "string"}
+              - {label: "标题", name: "title", widget: "string"}
+              - {label: "描述", name: "description", widget: "string"}
+          - label: "经济价值"
+            name: "economic_value"
+            widget: "object"
+            fields:
+              - {label: "消费者剩余(亿美元)", name: "consumer_surplus", widget: "number"}
+              - {label: "年份", name: "year", widget: "string"}
+
+      - label: "热门主题详情"
+        name: "detail_topics"
+        file: "content/detail_topics.json"
+        fields:
+          - {label: "标题", name: "title", widget: "string"}
+          - {label: "副标题", name: "subtitle", widget: "string"}
+          - label: "前三大主题"
+            name: "top_topics"
+            widget: "list"
+            fields:
+              - {label: "图标", name: "icon", widget: "string"}
+              - {label: "标题", name: "title", widget: "string"}
+              - {label: "百分比", name: "percentage", widget: "number"}
+              - {label: "描述", name: "description", widget: "string"}
+          - label: "教育影响"
+            name: "education_impact"
+            widget: "object"
+            fields:
+              - {label: "辅导教学百分比", name: "tutoring_percentage", widget: "number"}
+          - label: "令人惊讶的发现"
+            name: "surprising_findings"
+            widget: "list"
+            fields:
+              - {label: "标题", name: "title", widget: "string"}
+              - {label: "百分比", name: "percentage", widget: "number"}
+              - {label: "描述", name: "description", widget: "string"}
+
+      - label: "交互方式详情"
+        name: "detail_interaction"
+        file: "content/detail_interaction.json"
+        fields:
+          - {label: "标题", name: "title", widget: "string"}
+          - {label: "副标题", name: "subtitle", widget: "string"}
+          - label: "交互模式"
+            name: "interaction_modes"
+            widget: "list"
+            fields:
+              - {label: "类型", name: "type", widget: "string"}
+              - {label: "百分比", name: "percentage", widget: "number"}
+              - {label: "描述", name: "description", widget: "string"}
+              - {label: "示例", name: "examples", widget: "text"}
+          - label: "用户满意度"
+            name: "satisfaction"
+            widget: "list"
+            fields:
+              - {label: "类型", name: "type", widget: "string"}
+              - {label: "评分", name: "rating", widget: "string"}
+              - {label: "描述", name: "description", widget: "string"}
+
+      - label: "人口统计详情"
+        name: "detail_demographics"
+        file: "content/detail_demographics.json"
+        fields:
+          - {label: "标题", name: "title", widget: "string"}
+          - {label: "副标题", name: "subtitle", widget: "string"}
+          - label: "性别分布"
+            name: "gender"
+            widget: "object"
+            fields:
+              - {label: "2022年12月女性占比", name: "dec_2022_female", widget: "number"}
+              - {label: "2025年6月女性占比", name: "june_2025_female", widget: "number"}
+          - label: "年龄分布"
+            name: "age"
+            widget: "object"
+            fields:
+              - {label: "26岁以下占比", name: "under_26_percentage", widget: "number"}
+              - label: "工作相关消息按年龄"
+                name: "work_by_age"
+                widget: "list"
+                fields:
+                  - {label: "年龄段", name: "age_range", widget: "string"}
+                  - {label: "百分比", name: "percentage", widget: "number"}
+          - label: "教育背景影响"
+            name: "education"
+            widget: "list"
+            fields:
+              - {label: "学历", name: "level", widget: "string"}
+              - {label: "工作消息百分比", name: "work_percentage", widget: "number"}
+          - label: "职业差异"
+            name: "occupation"
+            widget: "list"
+            fields:
+              - {label: "图标", name: "icon", widget: "string"}
+              - {label: "职业", name: "title", widget: "string"}
+              - {label: "工作消息百分比", name: "percentage", widget: "number"}
+              - {label: "描述", name: "description", widget: "string"}
+
+      - label: "写作主导详情"
+        name: "detail_writing"
+        file: "content/detail_writing.json"
+        fields:
+          - {label: "标题", name: "title", widget: "string"}
+          - {label: "副标题", name: "subtitle", widget: "string"}
+          - label: "写作占比"
+            name: "writing_percentage"
+            widget: "object"
+            fields:
+              - {label: "总体占比", name: "overall", widget: "number"}
+              - label: "各职业占比"
+                name: "by_occupation"
+                widget: "list"
+                fields:
+                  - {label: "职业", name: "occupation", widget: "string"}
+                  - {label: "百分比", name: "percentage", widget: "number"}
+          - label: "写作任务细分"
+            name: "writing_tasks"
+            widget: "list"
+            fields:
+              - {label: "图标", name: "icon", widget: "string"}
+              - {label: "标题", name: "title", widget: "string"}
+              - {label: "描述", name: "description", widget: "string"}
+              - {label: "重要性", name: "importance", widget: "string"}
+          - label: "生产力影响"
+            name: "productivity_impact"
+            widget: "list"
+            fields:
+              - {label: "图标", name: "icon", widget: "string"}
+              - {label: "活动", name: "activity", widget: "string"}
+              - {label: "百分比", name: "percentage", widget: "number"}
+              - {label: "描述", name: "description", widget: "string"}
