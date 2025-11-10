@@ -12,14 +12,12 @@
   [build.environment]
     PYTHON_VERSION = "3.11"
 
-# 重定向规则
+# 重定向规则 - SPA 支持
 [[redirects]]
-  # SPA 路由支持（如果需要的话）
   from = "/*"
   to = "/index.html"
   status = 200
   force = false
-  conditions = {Role = ["public"]}
 
 # HTTP 头设置
 [[headers]]
@@ -32,15 +30,7 @@
     Referrer-Policy = "strict-origin-when-cross-origin"
 
     # 内容安全策略（CSP）
-    Content-Security-Policy = """
-      default-src 'self';
-      script-src 'self' 'unsafe-inline' https://unpkg.com https://identity.netlify.com;
-      style-src 'self' 'unsafe-inline';
-      img-src 'self' data: https: blob:;
-      font-src 'self' data:;
-      connect-src 'self' https://api.github.com https://identity.netlify.com;
-      frame-src https://identity.netlify.com;
-    """
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com https://identity.netlify.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: blob:; font-src 'self' data:; connect-src 'self' https://api.github.com https://identity.netlify.com; frame-src https://identity.netlify.com;"
 
     # 缓存控制
     Cache-Control = "public, max-age=0, must-revalidate"
@@ -73,15 +63,7 @@
   for = "/admin/*"
   [headers.values]
     # Admin 页面需要宽松的 CSP
-    Content-Security-Policy = """
-      default-src 'self';
-      script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://identity.netlify.com;
-      style-src 'self' 'unsafe-inline' https://unpkg.com;
-      img-src 'self' data: https: blob:;
-      font-src 'self' data:;
-      connect-src 'self' https://api.github.com https://identity.netlify.com https://*.algolia.net https://*.algolianet.com;
-      frame-src https://identity.netlify.com;
-    """
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://identity.netlify.com; style-src 'self' 'unsafe-inline' https://unpkg.com; img-src 'self' data: https: blob:; font-src 'self' data:; connect-src 'self' https://api.github.com https://identity.netlify.com https://*.algolia.net https://*.algolianet.com; frame-src https://identity.netlify.com;"
     X-Frame-Options = "SAMEORIGIN"
 
 # 404 页面
