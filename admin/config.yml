@@ -1,0 +1,65 @@
+backend:
+  name: git-gateway
+  branch: main # 你的主分支名称
+
+# 本地开发时使用
+# local_backend: true
+
+# 媒体文件配置
+media_folder: "images/uploads" # 媒体文件存储路径
+public_folder: "/images/uploads" # 访问路径
+
+# 发布模式
+publish_mode: editorial_workflow # 启用草稿、审核和发布工作流
+
+# 语言设置
+locale: 'zh_Hans'
+
+# 内容集合配置
+collections:
+  - name: "articles" # 集合名称（用于路由）
+    label: "文章" # 在 CMS UI 中显示的名称
+    folder: "content/articles" # 文章存储的文件夹
+    create: true # 允许用户创建新文档
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}" # 文件名模板
+    fields: # 文章字段
+      - {label: "标题", name: "title", widget: "string"}
+      - {label: "发布日期", name: "date", widget: "datetime"}
+      - {label: "描述", name: "description", widget: "string"}
+      - {label: "封面图", name: "image", widget: "image", required: false}
+      - {label: "作者", name: "author", widget: "string"}
+      - {label: "标签", name: "tags", widget: "list", default: ["创业"]}
+      - {label: "正文", name: "body", widget: "markdown"}
+
+  - name: "resources" # 资源集合
+    label: "资源"
+    folder: "content/resources"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - {label: "资源名称", name: "title", widget: "string"}
+      - {label: "类别", name: "category", widget: "select", options: ["政策法规", "创业服务", "融资信息", "行业分析", "其他"]}
+      - {label: "描述", name: "description", widget: "text"}
+      - {label: "链接", name: "url", widget: "string", required: false}
+      - {label: "文件", name: "file", widget: "file", required: false}
+      - {label: "发布日期", name: "date", widget: "datetime"}
+      - {label: "内容", name: "body", widget: "markdown", required: false}
+
+  - name: "pages" # 页面集合
+    label: "页面"
+    files:
+      - label: "关于我们"
+        name: "about"
+        file: "content/pages/about.md"
+        fields:
+          - {label: "标题", name: "title", widget: "string"}
+          - {label: "内容", name: "body", widget: "markdown"}
+      - label: "联系方式"
+        name: "contact"
+        file: "content/pages/contact.md"
+        fields:
+          - {label: "标题", name: "title", widget: "string"}
+          - {label: "邮箱", name: "email", widget: "string"}
+          - {label: "电话", name: "phone", widget: "string", required: false}
+          - {label: "地址", name: "address", widget: "text", required: false}
+          - {label: "内容", name: "body", widget: "markdown"}
