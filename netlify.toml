@@ -5,11 +5,13 @@
   # 构建命令 - 静态HTML不需要构建
   command = "echo 'No build needed for static HTML'"
 
-# 重定向规则 - SPA应用支持
+# 重定向规则 - 只对不存在的文件重定向到首页
+# 注意：设置 force = false 让 Netlify 优先查找实际文件
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+  force = false
 
 # 自定义头部
 [[headers]]

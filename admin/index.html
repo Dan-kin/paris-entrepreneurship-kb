@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理后台 - 巴黎创业知识库</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 60px 40px;
+            max-width: 900px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.2em;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .admin-panel {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+
+        .admin-section {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #f5576c;
+        }
+
+        .admin-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .admin-section h2 {
+            color: #f5576c;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+        }
+
+        .admin-section p {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .admin-section ul {
+            margin-left: 20px;
+            color: #666;
+        }
+
+        .admin-section li {
+            margin-bottom: 8px;
+        }
+
+        .emoji {
+            font-size: 3em;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(245, 87, 108, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 30px;
+            color: #f5576c;
+            text-decoration: none;
+            font-size: 1.1em;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: #d64456;
+        }
+
+        .footer {
+            margin-top: 40px;
+            color: #999;
+            font-size: 0.9em;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="emoji">🔐</div>
+        <h1>管理后台</h1>
+        <p class="subtitle">Paris Entrepreneurship KB - Admin Panel</p>
+
+        <div class="admin-panel">
+            <div class="admin-section">
+                <h2>📊 内容管理</h2>
+                <p>管理知识库的内容、文章和资源</p>
+                <div class="button-group">
+                    <button class="btn" onclick="alert('内容管理功能开发中...')">管理文章</button>
+                    <button class="btn" onclick="alert('内容管理功能开发中...')">管理分类</button>
+                    <button class="btn" onclick="alert('内容管理功能开发中...')">管理标签</button>
+                </div>
+            </div>
+
+            <div class="admin-section">
+                <h2>👥 用户管理</h2>
+                <p>管理用户账户和权限</p>
+                <div class="button-group">
+                    <button class="btn btn-secondary" onclick="alert('用户管理功能开发中...')">用户列表</button>
+                    <button class="btn btn-secondary" onclick="alert('用户管理功能开发中...')">权限设置</button>
+                </div>
+            </div>
+
+            <div class="admin-section">
+                <h2>⚙️ 系统设置</h2>
+                <p>配置网站和系统参数</p>
+                <ul>
+                    <li>网站基本信息配置</li>
+                    <li>SEO 设置</li>
+                    <li>API 集成管理</li>
+                    <li>备份与恢复</li>
+                </ul>
+                <div class="button-group">
+                    <button class="btn" onclick="alert('系统设置功能开发中...')">系统配置</button>
+                </div>
+            </div>
+
+            <div class="admin-section">
+                <h2>📈 统计分析</h2>
+                <p>查看网站访问和使用统计</p>
+                <div class="button-group">
+                    <button class="btn btn-secondary" onclick="alert('统计功能开发中...')">访问统计</button>
+                    <button class="btn btn-secondary" onclick="alert('统计功能开发中...')">用户行为</button>
+                </div>
+            </div>
+        </div>
+
+        <a href="/" class="back-link">← 返回首页</a>
+
+        <div class="footer">
+            <p>《移个朋友·巴黎创业》项目 - 管理后台</p>
+            <p>最后更新: 2025-11-10</p>
+        </div>
+    </div>
+</body>
+</html>
