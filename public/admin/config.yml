@@ -1,0 +1,89 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "public/images/uploads"
+public_folder: "/images/uploads"
+
+collections:
+  - name: "stories"
+    label: "创业故事"
+    folder: "content/stories"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - {label: "标题", name: "title", widget: "string"}
+      - {label: "发布日期", name: "date", widget: "datetime"}
+      - {label: "作者", name: "author", widget: "string"}
+      - {label: "分类", name: "category", widget: "select", options: ["创业经验", "融资故事", "产品开发", "团队管理", "市场拓展", "失败教训", "成功案例"]}
+      - {label: "标签", name: "tags", widget: "list", required: false}
+      - {label: "封面图", name: "image", widget: "image", required: false}
+      - {label: "摘要", name: "excerpt", widget: "text", required: false}
+      - {label: "内容", name: "body", widget: "markdown"}
+      - {label: "是否发布", name: "published", widget: "boolean", default: true}
+
+  - name: "entrepreneurs"
+    label: "创业者档案"
+    folder: "content/entrepreneurs"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - {label: "姓名", name: "name", widget: "string"}
+      - {label: "头像", name: "avatar", widget: "image", required: false}
+      - {label: "公司名称", name: "company", widget: "string"}
+      - {label: "行业", name: "industry", widget: "string"}
+      - {label: "职位", name: "position", widget: "string"}
+      - {label: "个人简介", name: "bio", widget: "text"}
+      - {label: "联系方式", name: "contact", widget: "object", fields: [
+          {label: "邮箱", name: "email", widget: "string", required: false},
+          {label: "LinkedIn", name: "linkedin", widget: "string", required: false},
+          {label: "Twitter", name: "twitter", widget: "string", required: false},
+          {label: "微信", name: "wechat", widget: "string", required: false}
+        ]}
+      - {label: "详细介绍", name: "body", widget: "markdown"}
+
+  - name: "resources"
+    label: "资源库"
+    folder: "content/resources"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - {label: "标题", name: "title", widget: "string"}
+      - {label: "类型", name: "type", widget: "select", options: ["工具推荐", "法律文档", "融资模板", "市场报告", "书籍推荐", "课程资料"]}
+      - {label: "标签", name: "tags", widget: "list", required: false}
+      - {label: "链接", name: "url", widget: "string", required: false}
+      - {label: "文件", name: "file", widget: "file", required: false}
+      - {label: "描述", name: "body", widget: "markdown"}
+
+  - name: "events"
+    label: "活动信息"
+    folder: "content/events"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - {label: "活动名称", name: "title", widget: "string"}
+      - {label: "活动时间", name: "date", widget: "datetime"}
+      - {label: "地点", name: "location", widget: "string"}
+      - {label: "活动类型", name: "type", widget: "select", options: ["创业分享会", "融资路演", "工作坊", "社交聚会", "线上讲座"]}
+      - {label: "主讲人", name: "speakers", widget: "list", required: false}
+      - {label: "活动海报", name: "poster", widget: "image", required: false}
+      - {label: "报名链接", name: "registration_url", widget: "string", required: false}
+      - {label: "活动介绍", name: "body", widget: "markdown"}
+
+  - name: "pages"
+    label: "页面"
+    files:
+      - label: "关于我们"
+        name: "about"
+        file: "content/pages/about.md"
+        fields:
+          - {label: "标题", name: "title", widget: "string"}
+          - {label: "内容", name: "body", widget: "markdown"}
+      - label: "首页配置"
+        name: "home"
+        file: "content/pages/home.md"
+        fields:
+          - {label: "网站标题", name: "site_title", widget: "string"}
+          - {label: "网站副标题", name: "site_subtitle", widget: "string"}
+          - {label: "欢迎语", name: "welcome_message", widget: "text"}
+          - {label: "精选故事", name: "featured_stories", widget: "list", required: false}

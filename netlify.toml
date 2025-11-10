@@ -1,0 +1,151 @@
+# Netlify 部署配置文件
+# 移个朋友·巴黎创业知识库
+
+[build]
+  # 构建命令
+  command = "python src/build.py"
+
+  # 发布目录
+  publish = "public"
+
+  # 构建环境
+  environment = { PYTHON_VERSION = "3.11" }
+
+[build.processing]
+  # 跳过 HTML 压缩（保留格式）
+  skip_processing = false
+
+[build.processing.css]
+  # CSS 处理
+  bundle = true
+  minify = true
+
+[build.processing.js]
+  # JavaScript 处理
+  bundle = true
+  minify = true
+
+[build.processing.html]
+  # HTML 处理
+  pretty_urls = true
+
+[build.processing.images]
+  # 图片优化
+  compress = true
+
+# 开发服务器配置
+[dev]
+  command = "python -m http.server 8888 --directory public"
+  targetPort = 8888
+  publish = "public"
+  autoLaunch = false
+
+# 重定向和重写规则
+[[redirects]]
+  from = "/admin/*"
+  to = "/admin/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+# SPA 路由支持（可选）
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  force = false
+  conditions = {Role = ["admin"]}
+
+# 自定义头部
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "geolocation=(), microphone=(), camera=()"
+
+[[headers]]
+  for = "/admin/*"
+  [headers.values]
+    X-Robots-Tag = "noindex"
+
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.json"
+  [headers.values]
+    Cache-Control = "public, max-age=300, must-revalidate"
+    Content-Type = "application/json; charset=utf-8"
+
+[[headers]]
+  for = "/index.json"
+  [headers.values]
+    Cache-Control = "public, max-age=60, must-revalidate"
+    Access-Control-Allow-Origin = "*"
+
+# 表单处理（联系表单等）
+# [[forms]]
+#   name = "contact"
+
+# Netlify Identity 配置
+[identity]
+  # 启用 Git Gateway
+  settings = { roles = ["admin", "editor"] }
+
+# Git Gateway 配置（用于 Decap CMS）
+[gitgateway]
+  # 启用 Git Gateway
+  enabled = true
+
+# 插件
+[[plugins]]
+  package = "@netlify/plugin-lighthouse"
+  [plugins.inputs]
+    # Lighthouse 性能检查
+    output_path = "reports/lighthouse.html"
+
+# 上下文特定配置
+[context.production]
+  command = "python src/build.py"
+  [context.production.environment]
+    PYTHON_VERSION = "3.11"
+    NODE_VERSION = "18"
+
+[context.deploy-preview]
+  command = "python src/build.py"
+
+[context.branch-deploy]
+  command = "python src/build.py"
+
+# 功能目录（如果使用 Netlify Functions）
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+# 错误页面
+# [[edge_handlers]]
+#   handler = "error-handler"
+#   path = "/404"
+
+# 分支部署设置
+[build.ignore]
+  # 当这个命令返回 0 时跳过构建
+  # command = "git diff --quiet HEAD^ HEAD -- content/"

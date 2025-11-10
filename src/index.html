@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="移个朋友·巴黎创业 - 分享在巴黎的创业故事、经验和资源">
+    <meta name="keywords" content="巴黎创业, 法国创业, 创业故事, 创业经验, 海外创业">
+    <title>移个朋友·巴黎创业 - 知识库</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/images/favicon.png">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="/styles.css">
+
+    <!-- Netlify Identity -->
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <h1>移个朋友·巴黎创业</h1>
+                <p class="tagline">在巴黎，我们一起创业</p>
+            </div>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#home" class="nav-link active">首页</a></li>
+                <li><a href="#stories" class="nav-link">创业故事</a></li>
+                <li><a href="#entrepreneurs" class="nav-link">创业者</a></li>
+                <li><a href="#resources" class="nav-link">资源库</a></li>
+                <li><a href="#events" class="nav-link">活动</a></li>
+                <li><a href="/admin/" class="nav-link admin-link">管理后台</a></li>
+            </ul>
+            <button class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- 主容器 -->
+    <main class="main-content">
+        <!-- 首页欢迎区 -->
+        <section id="home" class="section hero-section">
+            <div class="container">
+                <div class="hero-content">
+                    <h2 class="hero-title">在巴黎的创业故事</h2>
+                    <p class="hero-subtitle">
+                        这里汇聚了在巴黎创业的华人朋友们的真实经历、实战经验和宝贵资源。<br>
+                        无论你是正在创业，还是准备创业，这里都能给你启发和帮助。
+                    </p>
+                    <div class="hero-actions">
+                        <a href="#stories" class="btn btn-primary">浏览故事</a>
+                        <a href="#resources" class="btn btn-secondary">探索资源</a>
+                    </div>
+                </div>
+
+                <!-- 统计信息 -->
+                <div class="stats-grid" id="statsGrid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalStories">0</div>
+                        <div class="stat-label">创业故事</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalEntrepreneurs">0</div>
+                        <div class="stat-label">创业者</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalResources">0</div>
+                        <div class="stat-label">资源</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalEvents">0</div>
+                        <div class="stat-label">活动</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 创业故事列表 -->
+        <section id="stories" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">创业故事</h2>
+                    <div class="filter-controls">
+                        <select id="categoryFilter" class="filter-select">
+                            <option value="">所有分类</option>
+                            <option value="创业经验">创业经验</option>
+                            <option value="融资故事">融资故事</option>
+                            <option value="产品开发">产品开发</option>
+                            <option value="团队管理">团队管理</option>
+                            <option value="市场拓展">市场拓展</option>
+                            <option value="失败教训">失败教训</option>
+                            <option value="成功案例">成功案例</option>
+                        </select>
+                        <input type="search" id="searchInput" class="search-input" placeholder="搜索故事...">
+                    </div>
+                </div>
+
+                <div id="storiesGrid" class="cards-grid">
+                    <!-- 故事卡片将由 JavaScript 动态生成 -->
+                    <div class="loading">加载中...</div>
+                </div>
+
+                <div id="storiesEmpty" class="empty-state" style="display: none;">
+                    <p>暂无故事内容</p>
+                    <a href="/admin/" class="btn btn-primary">添加第一个故事</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 创业者档案 -->
+        <section id="entrepreneurs" class="section section-alt">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">创业者档案</h2>
+                    <p class="section-description">认识在巴黎创业的华人创业者们</p>
+                </div>
+
+                <div id="entrepreneursGrid" class="entrepreneurs-grid">
+                    <!-- 创业者卡片将由 JavaScript 动态生成 -->
+                    <div class="loading">加载中...</div>
+                </div>
+
+                <div id="entrepreneursEmpty" class="empty-state" style="display: none;">
+                    <p>暂无创业者档案</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 资源库 -->
+        <section id="resources" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">资源库</h2>
+                    <div class="filter-controls">
+                        <select id="resourceTypeFilter" class="filter-select">
+                            <option value="">所有类型</option>
+                            <option value="工具推荐">工具推荐</option>
+                            <option value="法律文档">法律文档</option>
+                            <option value="融资模板">融资模板</option>
+                            <option value="市场报告">市场报告</option>
+                            <option value="书籍推荐">书籍推荐</option>
+                            <option value="课程资料">课程资料</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="resourcesList" class="resources-list">
+                    <!-- 资源项将由 JavaScript 动态生成 -->
+                    <div class="loading">加载中...</div>
+                </div>
+
+                <div id="resourcesEmpty" class="empty-state" style="display: none;">
+                    <p>暂无资源内容</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 活动信息 -->
+        <section id="events" class="section section-alt">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">活动信息</h2>
+                    <p class="section-description">参加创业相关的活动，扩展你的人脉圈</p>
+                </div>
+
+                <div id="eventsGrid" class="cards-grid">
+                    <!-- 活动卡片将由 JavaScript 动态生成 -->
+                    <div class="loading">加载中...</div>
+                </div>
+
+                <div id="eventsEmpty" class="empty-state" style="display: none;">
+                    <p>暂无活动信息</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 详情模态框 -->
+    <div id="detailModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">&times;</button>
+            <div id="modalBody" class="modal-body">
+                <!-- 内容将由 JavaScript 动态生成 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>移个朋友·巴黎创业</h3>
+                    <p>分享真实的创业故事，连接创业者社区</p>
+                </div>
+                <div class="footer-section">
+                    <h4>快速链接</h4>
+                    <ul>
+                        <li><a href="#stories">创业故事</a></li>
+                        <li><a href="#entrepreneurs">创业者</a></li>
+                        <li><a href="#resources">资源库</a></li>
+                        <li><a href="#events">活动</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>联系我们</h4>
+                    <p>想要分享你的创业故事？</p>
+                    <a href="/admin/" class="btn btn-small">投稿</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 移个朋友·巴黎创业. All rights reserved.</p>
+                <p class="update-info" id="updateInfo"></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="/script.js"></script>
+    <script src="/update-detector.js"></script>
+
+    <!-- Netlify Identity 登录处理 -->
+    <script>
+        if (window.netlifyIdentity) {
+            window.netlifyIdentity.on("init", user => {
+                if (!user) {
+                    window.netlifyIdentity.on("login", () => {
+                        document.location.href = "/admin/";
+                    });
+                }
+            });
+        }
+    </script>
+</body>
+</html>
