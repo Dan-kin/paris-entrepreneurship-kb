@@ -1,0 +1,121 @@
+# Netlify 配置文件
+# 文档: https://docs.netlify.com/configure-builds/file-based-configuration/
+
+[build]
+  # 构建命令
+  command = "python src/build.py"
+
+  # 发布目录
+  publish = "dist"
+
+  # 生产环境设置
+  [build.environment]
+    PYTHON_VERSION = "3.11"
+
+# 重定向规则
+[[redirects]]
+  # SPA 路由支持（如果需要的话）
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  force = false
+  conditions = {Role = ["public"]}
+
+# HTTP 头设置
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # 安全头
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+    # 内容安全策略（CSP）
+    Content-Security-Policy = """
+      default-src 'self';
+      script-src 'self' 'unsafe-inline' https://unpkg.com https://identity.netlify.com;
+      style-src 'self' 'unsafe-inline';
+      img-src 'self' data: https: blob:;
+      font-src 'self' data:;
+      connect-src 'self' https://api.github.com https://identity.netlify.com;
+      frame-src https://identity.netlify.com;
+    """
+
+    # 缓存控制
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# 静态资源缓存
+[[headers]]
+  for = "/uploads/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# JSON 数据文件缓存策略（较短的缓存时间，以便快速更新）
+[[headers]]
+  for = "/data/*.json"
+  [headers.values]
+    Cache-Control = "public, max-age=300, must-revalidate"
+    Content-Type = "application/json; charset=utf-8"
+
+# Admin 页面配置
+[[headers]]
+  for = "/admin/*"
+  [headers.values]
+    # Admin 页面需要宽松的 CSP
+    Content-Security-Policy = """
+      default-src 'self';
+      script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://identity.netlify.com;
+      style-src 'self' 'unsafe-inline' https://unpkg.com;
+      img-src 'self' data: https: blob:;
+      font-src 'self' data:;
+      connect-src 'self' https://api.github.com https://identity.netlify.com https://*.algolia.net https://*.algolianet.com;
+      frame-src https://identity.netlify.com;
+    """
+    X-Frame-Options = "SAMEORIGIN"
+
+# 404 页面
+[[redirects]]
+  from = "/404"
+  to = "/index.html"
+  status = 404
+
+# Netlify Identity（用于 Decap CMS 认证）
+[context.production]
+  environment = { PYTHON_VERSION = "3.11" }
+
+[context.deploy-preview]
+  command = "python src/build.py"
+
+[context.branch-deploy]
+  command = "python src/build.py"
+
+# 插件配置
+[[plugins]]
+  package = "@netlify/plugin-lighthouse"
+
+  # Lighthouse 配置（可选，用于性能监控）
+  [plugins.inputs.thresholds]
+    performance = 0.8
+    accessibility = 0.9
+    best-practices = 0.9
+    seo = 0.9
+
+[[plugins]]
+  # 自动优化插件
+  package = "netlify-plugin-submit-sitemap"
+
+  [plugins.inputs]
+    # 提交 sitemap 到搜索引擎（如果你有 sitemap 的话）
+    baseUrl = "https://paris-entrepreneurship.netlify.app"
+    sitemapPath = "/sitemap.xml"

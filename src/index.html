@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="移个朋友·巴黎创业 - 分享在巴黎创业的故事、经验和资源">
+    <meta name="keywords" content="巴黎创业,法国创业,创业故事,创业资源,移民创业">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="移个朋友·巴黎创业">
+    <meta property="og:description" content="巴黎创业故事与资源知识库">
+    <meta property="og:image" content="/uploads/og-image.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="移个朋友·巴黎创业">
+    <meta property="twitter:description" content="巴黎创业故事与资源知识库">
+
+    <title>移个朋友·巴黎创业 | 巴黎创业故事与资源知识库</title>
+
+    <!-- 样式表 -->
+    <link rel="stylesheet" href="/styles.css">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/favicon.png">
+</head>
+<body>
+    <!-- 页面加载动画 -->
+    <div id="loader" class="loader">
+        <div class="loader-spinner"></div>
+        <p>加载中...</p>
+    </div>
+
+    <!-- 顶部导航栏 -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>移个朋友·巴黎创业</h1>
+                    <p class="subtitle">巴黎创业故事与资源知识库</p>
+                </div>
+                <nav class="nav">
+                    <a href="#stories" class="nav-link active" data-section="stories">创业故事</a>
+                    <a href="#resources" class="nav-link" data-section="resources">创业资源</a>
+                    <a href="#about" class="nav-link" data-section="about">关于我们</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主要内容区域 -->
+    <main class="main">
+        <div class="container">
+
+            <!-- 搜索和筛选区域 -->
+            <section class="search-section">
+                <div class="search-box">
+                    <input
+                        type="text"
+                        id="searchInput"
+                        class="search-input"
+                        placeholder="搜索创业故事、行业、关键词..."
+                        aria-label="搜索">
+                    <button class="search-btn" id="searchBtn">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M9 17A8 8 0 1 0 9 1a8 8 0 0 0 0 16zM19 19l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="filter-tags" id="filterTags">
+                    <!-- 标签过滤器动态生成 -->
+                </div>
+            </section>
+
+            <!-- 创业故事区域 -->
+            <section id="stories" class="content-section active">
+                <h2 class="section-title">创业故事</h2>
+                <div class="stats" id="storiesStats">
+                    <!-- 统计信息动态生成 -->
+                </div>
+                <div class="stories-grid" id="storiesGrid">
+                    <!-- 故事卡片动态生成 -->
+                </div>
+            </section>
+
+            <!-- 创业资源区域 -->
+            <section id="resources" class="content-section">
+                <h2 class="section-title">创业资源</h2>
+                <div class="resource-tabs" id="resourceTabs">
+                    <button class="tab-btn active" data-type="all">全部</button>
+                    <button class="tab-btn" data-type="政策法规">政策法规</button>
+                    <button class="tab-btn" data-type="融资信息">融资信息</button>
+                    <button class="tab-btn" data-type="孵化器">孵化器</button>
+                    <button class="tab-btn" data-type="活动">活动</button>
+                    <button class="tab-btn" data-type="工具">工具</button>
+                </div>
+                <div class="resources-list" id="resourcesList">
+                    <!-- 资源列表动态生成 -->
+                </div>
+            </section>
+
+            <!-- 关于我们区域 -->
+            <section id="about" class="content-section">
+                <h2 class="section-title">关于我们</h2>
+                <div class="about-content">
+                    <div class="about-card">
+                        <h3>项目简介</h3>
+                        <p>《移个朋友·巴黎创业》是一个开放的知识库项目，致力于收集和分享在巴黎创业的华人故事、经验和资源。</p>
+                        <p>我们希望通过这个平台，帮助更多有志在法国创业的朋友，了解真实的创业历程，获取有价值的信息和资源。</p>
+                    </div>
+
+                    <div class="about-card">
+                        <h3>如何贡献</h3>
+                        <p>这是一个开源项目，欢迎大家贡献创业故事和资源：</p>
+                        <ul>
+                            <li>分享您的创业故事</li>
+                            <li>推荐有价值的创业资源</li>
+                            <li>完善和更新现有内容</li>
+                            <li>改进网站功能和设计</li>
+                        </ul>
+                        <a href="https://github.com/Dan-kin/paris-entrepreneurship-kb" class="btn-primary" target="_blank" rel="noopener">
+                            访问 GitHub 仓库
+                        </a>
+                    </div>
+
+                    <div class="about-card">
+                        <h3>联系我们</h3>
+                        <p>如有任何问题或建议，欢迎通过以下方式联系我们：</p>
+                        <div class="contact-info" id="contactInfo">
+                            <!-- 联系信息动态生成 -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- 故事详情模态框 -->
+    <div id="storyModal" class="modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </button>
+            <div class="modal-body" id="modalBody">
+                <!-- 故事详情动态生成 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2024 移个朋友·巴黎创业. 本项目采用开源协议.</p>
+                <p class="update-info" id="updateInfo">最后更新：加载中...</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 返回顶部按钮 -->
+    <button id="backToTop" class="back-to-top" aria-label="返回顶部">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+
+    <!-- JavaScript -->
+    <script src="/script.js"></script>
+    <script src="/update-detector.js"></script>
+</body>
+</html>

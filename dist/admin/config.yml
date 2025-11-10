@@ -1,0 +1,72 @@
+backend:
+  name: github
+  repo: Dan-kin/paris-entrepreneurship-kb
+  branch: main
+  site_domain: paris-entrepreneurship.netlify.app
+
+media_folder: "content/uploads"
+public_folder: "/uploads"
+
+# 编辑器本地化
+locale: 'zh_Hans'
+
+collections:
+  - name: "stories"
+    label: "创业故事"
+    folder: "content/stories"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    editor:
+      preview: true
+
+    fields:
+      - { label: "故事ID", name: "id", widget: "number", hint: "自增ID，建议从1开始" }
+      - { label: "标题", name: "title", widget: "string", hint: "故事的标题" }
+      - { label: "创业者姓名", name: "entrepreneur", widget: "string" }
+      - { label: "公司名称", name: "company", widget: "string" }
+      - { label: "行业", name: "industry", widget: "string", hint: "例如：科技、餐饮、教育等" }
+      - { label: "创立年份", name: "founded_year", widget: "number", hint: "公司创立的年份" }
+      - { label: "所在城市", name: "location", widget: "string", default: "巴黎" }
+      - { label: "封面图片", name: "cover_image", widget: "image", required: false, hint: "建议尺寸：1200x630" }
+      - { label: "标签", name: "tags", widget: "list", required: false, hint: "例如：初创、融资、成功案例等" }
+      - { label: "摘要", name: "excerpt", widget: "text", hint: "简短的故事摘要，100字以内" }
+      - { label: "故事内容", name: "body", widget: "markdown", hint: "完整的创业故事" }
+      - { label: "发布日期", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false }
+      - { label: "是否发布", name: "published", widget: "boolean", default: true }
+
+  - name: "resources"
+    label: "创业资源"
+    folder: "content/resources"
+    create: true
+    slug: "{{slug}}"
+    editor:
+      preview: true
+
+    fields:
+      - { label: "资源ID", name: "id", widget: "number" }
+      - { label: "资源标题", name: "title", widget: "string" }
+      - { label: "资源类型", name: "resource_type", widget: "select", options: ["政策法规", "融资信息", "孵化器", "活动", "工具", "其他"] }
+      - { label: "资源描述", name: "description", widget: "text" }
+      - { label: "相关链接", name: "url", widget: "string", required: false }
+      - { label: "联系方式", name: "contact", widget: "string", required: false }
+      - { label: "详细内容", name: "body", widget: "markdown" }
+      - { label: "发布日期", name: "date", widget: "datetime", format: "YYYY-MM-DD" }
+      - { label: "是否发布", name: "published", widget: "boolean", default: true }
+
+  - name: "settings"
+    label: "网站设置"
+    files:
+      - label: "网站基本信息"
+        name: "site"
+        file: "content/settings/site.yml"
+        fields:
+          - { label: "网站标题", name: "site_title", widget: "string", default: "移个朋友·巴黎创业" }
+          - { label: "网站副标题", name: "site_subtitle", widget: "string", default: "巴黎创业故事与资源知识库" }
+          - { label: "网站描述", name: "site_description", widget: "text" }
+          - { label: "网站Logo", name: "logo", widget: "image", required: false }
+          - { label: "联系邮箱", name: "contact_email", widget: "string", required: false }
+          - { label: "社交媒体", name: "social_media", widget: "object", required: false, fields: [
+              { label: "微信公众号", name: "wechat", widget: "string", required: false },
+              { label: "微博", name: "weibo", widget: "string", required: false },
+              { label: "小红书", name: "xiaohongshu", widget: "string", required: false }
+            ]}
