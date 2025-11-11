@@ -1,0 +1,33 @@
+{
+  "website": {
+    "base_url": "https://example.com",
+    "max_pages": 2,
+    "categories": [
+      {
+        "name": "创业故事",
+        "url": "https://example.com/startup-stories"
+      },
+      {
+        "name": "融资新闻",
+        "url": "https://example.com/funding"
+      }
+    ],
+    "selectors": {
+      "category_list": "nav.categories a",
+      "article_link": "article h2 a, .post-title a",
+      "article_title": "h1.title, article h1",
+      "article_content": "article .content, .post-content, main article",
+      "article_author": ".author, .byline",
+      "article_date": ".date, time"
+    },
+    "headers": {
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+    }
+  },
+  "ai": {
+    "provider": "openai",
+    "model": "gpt-4o",
+    "skip_translation": false
+  },
+  "output_dir": "content/stories"
+}
